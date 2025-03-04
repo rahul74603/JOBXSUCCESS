@@ -3,26 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Materials - JobXSuccess</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
-        h1 { color: blue; }
-        .material-list { text-align: left; max-width: 600px; margin: auto; }
-        .material-item { border-bottom: 1px solid #ddd; padding: 10px; }
-        a { text-decoration: none; color: green; }
-    </style>
+    <title>📚 Study Materials - JobXSuccess</title>
+    <link rel="stylesheet" href="style.css"> <!-- ✅ External CSS जोड़ा -->
 </head>
 <body>
-    <h1>📚 Study Materials</h1>
-    <div class="material-list">
-        <div class="material-item">
-            <h3>🔹 General Knowledge PDF</h3>
-            <a href="#">Download Now</a>
-        </div>
-        <div class="material-item">
-            <h3>🔹 Maths Shortcut Tricks</h3>
-            <a href="#">Download Now</a>
-        </div>
+
+    <!-- 🔹 Navigation Bar -->
+    <div class="navbar">
+        <a href="index.html">🏠 Home</a>
+        <a href="jobs.html">📌 Government Jobs</a>
+        <a href="study.html" class="active">📚 Study Materials</a>
     </div>
+
+    <h1>📚 फ्री स्टडी मटेरियल्स</h1>
+
+    <div id="materials-container">
+        <ul id="materials-list"></ul>
+    </div>
+
+    <!-- 🔥 Firebase SDK + Config -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import firebaseConfig from "./firebase-config.js"; // ✅ Firebase Config Import
+
+        // ✅ Firebase Initialize
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // ✅ Firebase से Study Materials लोड करना
+        function fetchMaterials() {
+            const materialsList = document.getElementById("materials-list");
+            const materialsRef = ref(db, "StudyMaterials"); // 🔹 Firebase Realtime Database में 'StudyMaterials' का Reference
+
+            onValue(materialsRef, (snapshot) => {
+                materialsList.innerHTML = ""; // 🔹 पहले की लिस्ट क्लियर करें
+                const data = snapshot.val();
+
+                if (data) {
+                    Object.keys(data).forEach((key) => {
+                        const material = data[key];
+                        const li = document.createElement("li");
+
+                        // ✅ अगर कोई डेटा मिसिंग है तो "N/A" दिखाएं
+                        const title = material.title || "N/A";
+                        const downloadLink = material.link || "#";
+
+                        li.classList.add("material-item"); // ✅ CSS Class Add की
+                        li.innerHTML = `
+                            <h3>🔹 ${title}</h3>
+                            <a href="${downloadLink}" target="_blank" class="download-btn">📥 Download Now</a>
+                        `;
+                        materialsList.appendChild(li);
+                    });
+                } else {
+                    materialsList.innerHTML = "<p>⚠️ कोई स्टडी मटेरियल उपलब्ध नहीं है।</p>";
+                }
+            });
+        }
+
+        fetchMaterials(); // ✅ फंक्शन को कॉल करना मत भूलना!
+    </script>
+
 </body>
 </html>
