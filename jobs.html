@@ -40,3 +40,30 @@
     </script>
 </body>
 </html>
+<script type="module">
+  // Firebase SDKs
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  // Firebase Initialize
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Firebase से Data लाने के लिए
+  const jobsRef = ref(db, "jobs");
+  onValue(jobsRef, (snapshot) => {
+    const data = snapshot.val();
+    console.log(data);
+  });
+</script>
