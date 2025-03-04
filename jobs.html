@@ -9,61 +9,41 @@
     <h1>सरकारी नौकरियाँ</h1>
     <ul id="jobs-list"></ul>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <!-- Firebase SDK (ES Module) -->
+    <script type="module">
+        // Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-    <script>
-        // Firebase Configuration
+        // ✅ Firebase Configuration (अपनी API Key और Project ID डालो)
         const firebaseConfig = {
-            databaseURL: "https://jobxsuccess-default-rtdb.asia-southeast1.firebasedatabase.app/"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        // ✅ Firebase Initialize
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-        // Fetch Data
-        function fetchJobs() {
-            const jobsList = document.getElementById("jobs-list");
-            database.ref("jobs").once("value", (snapshot) => {
-                snapshot.forEach((child) => {
-                    const job = child.val();
-                    const li = document.createElement("li");
-                    li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
-                    jobsList.appendChild(li);
-                });
-            });
-        }
+        // ✅ Firebase से Data लाने के लिए
+        const jobsList = document.getElementById("jobs-list");
+        const jobsRef = ref(db, "jobs");
 
-        fetchJobs();
+        onValue(jobsRef, (snapshot) => {
+            jobsList.innerHTML = ""; // पहले की लिस्ट हटाओ
+            const data = snapshot.val();
+            for (let key in data) {
+                const job = data[key];
+                const li = document.createElement("li");
+                li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
+                jobsList.appendChild(li);
+            }
+        });
     </script>
 </body>
 </html>
-<script type="module">
-  // Firebase SDKs
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
-  // Firebase Config
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  // Firebase Initialize
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  // Firebase से Data लाने के लिए
-  const jobsRef = ref(db, "jobs");
-  onValue(jobsRef, (snapshot) => {
-    const data = snapshot.val();
-    console.log(data);
-  });
-</script>
