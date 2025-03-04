@@ -9,40 +9,37 @@
     <h1>सरकारी नौकरियाँ</h1>
     <ul id="jobs-list"></ul>
 
-    <!-- secrets.js को पहले Load करना जरूरी है -->
-    <script src="secrets.js"></script>
-
     <!-- Firebase SDK -->
     <script type="module">
-        // Firebase Modules Import
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-        // ✅ secrets.js से Firebase Config लाओ
-        const firebaseConfig = window.firebaseConfig;
+        async function loadFirebaseConfig() {
+            const response = await fetch("https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/firebase-config.json");
+            const firebaseConfig = await response.json();
 
-        // ✅ Firebase Initialize करो
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
 
-        // ✅ Data Fetching Function
-        function fetchJobs() {
-            const jobsList = document.getElementById("jobs-list");
-            const jobsRef = ref(db, "jobs");
+            function fetchJobs() {
+                const jobsList = document.getElementById("jobs-list");
+                const jobsRef = ref(db, "jobs");
 
-            onValue(jobsRef, (snapshot) => {
-                jobsList.innerHTML = ""; // पुराना डेटा हटाओ
-                snapshot.forEach((child) => {
-                    const job = child.val();
-                    const li = document.createElement("li");
-                    li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
-                    jobsList.appendChild(li);
+                onValue(jobsRef, (snapshot) => {
+                    jobsList.innerHTML = "";
+                    snapshot.forEach((child) => {
+                        const job = child.val();
+                        const li = document.createElement("li");
+                        li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
+                        jobsList.appendChild(li);
+                    });
                 });
-            });
+            }
+
+            fetchJobs();
         }
 
-        // ✅ फ़ंक्शन को Call करो
-        fetchJobs();
+        loadFirebaseConfig();
     </script>
 </body>
 </html>
