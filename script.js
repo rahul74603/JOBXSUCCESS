@@ -1,4 +1,3 @@
-// ✅ DOM Load होने के बाद Code Execute होगा
 document.addEventListener("DOMContentLoaded", async function () {
     const jobsList = document.getElementById("jobsList");
 
@@ -7,42 +6,42 @@ document.addEventListener("DOMContentLoaded", async function () {
         const configModule = await import("./firebase-config.js");
         const firebaseConfig = configModule.default;
 
-        // ✅ Firebase Modules Import करना
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        // ✅ Firebase Initialize (अगर पहले से नहीं हुआ हो)
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
 
-        // ✅ Firebase Initialize (Duplication से बचने के लिए)
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const jobsRef = ref(db, "Jobs"); // ✅ 'Jobs' Database का सही Path
+        const db = firebase.database().ref("jobs"); // ✅ 'jobs' सही Database Path
 
-        // ✅ Firebase से Realtime Data Listen करना
-        onValue(jobsRef, (snapshot) => {
-            jobsList.innerHTML = ""; // 🔹 पहले की लिस्ट क्लियर करें
+        // ✅ Firebase से Jobs तेजी से लोड करें
+        db.on("value", (snapshot) => {
+            jobsList.innerHTML = ""; // 🔹 पहले की लिस्ट हटाना
             const jobs = snapshot.val();
 
             if (jobs) {
                 Object.keys(jobs).forEach((key) => {
                     const job = jobs[key];
+
+                    // 🔹 Deadline चेक करना (अगर नहीं है तो छिपा दो)
+                    const deadlineText = job.lastDate ? `📅 Last Date: ${job.lastDate}` : "";
+
+                    // 🔹 HTML Structure
                     const jobElement = document.createElement("li");
-
-                    // ✅ अगर कोई डेटा Missing है तो Default Value दें
-                    const title = job.title || "No Title";
-                    const company = job.company || "Unknown";
-                    const location = job.location || "N/A";
-                    const applyLink = job.applyLink || "#";
-
                     jobElement.innerHTML = `
-                        <strong>${title}</strong> - ${company}, ${location} 
-                        <a href="${applyLink}" target="_blank">Apply</a>
+                        <div class="job-card">
+                            <strong>${job.title}</strong> - <i>${job.company}</i>
+                            <br> 📍 Location: ${job.location}
+                            <br> ${deadlineText}
+                            <br> <a class="apply-btn" href="${job.applyLink}" target="_blank">🚀 Apply Now</a>
+                        </div>
                     `;
                     jobsList.appendChild(jobElement);
                 });
             } else {
-                jobsList.innerHTML = "<li>⚠️ कोई सरकारी नौकरी उपलब्ध नहीं</li>";
+                jobsList.innerHTML = "<li>कोई सरकारी नौकरी उपलब्ध नहीं</li>";
             }
         });
     } catch (error) {
-        console.error("🔥 Error loading Firebase config:", error);
+        console.error("❌ Error loading Firebase config:", error);
     }
 });
