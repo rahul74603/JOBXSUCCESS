@@ -4,46 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>डेटा जोड़ें - JobXSuccess</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        h1 { color: #007bff; }
+        button {
+            background: #28a745; color: white; border: none; padding: 10px 20px;
+            font-size: 16px; cursor: pointer; border-radius: 5px;
+        }
+        button:hover { background: #218838; }
+    </style>
 </head>
 <body>
-    <h1>Firebase में जॉब्स डेटा जोड़ें</h1>
-    <button onclick="setJobsData()">डेटा जोड़ें</button>
+    <h1>🔥 Firebase में जॉब्स डेटा जोड़ें</h1>
+    <button onclick="setJobsData()">📌 डेटा जोड़ें</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-        import firebaseConfig from "./firebase-config.js"; // ✅ Firebase Config
+        import getFirebaseConfig from "./config.js"; // ✅ Secure Firebase Config Import
 
-        // Firebase Init
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // ✅ Data Set Function
-        function setJobsData() {
-            set(ref(db, "jobs"), {
-                job1: {
-                    title: "SSC CGL भर्ती 2025",
-                    company: "Staff Selection Commission",
-                    location: "भारत",
-                    applyLink: "https://ssc.nic.in"
-                },
-                job2: {
-                    title: "UPSC IAS भर्ती 2025",
-                    company: "Union Public Service Commission",
-                    location: "भारत",
-                    applyLink: "https://upsc.gov.in"
-                },
-                job3: {
-                    title: "Railway NTPC भर्ती 2025",
-                    company: "Indian Railways",
-                    location: "भारत",
-                    applyLink: "https://indianrailways.gov.in"
+        async function initializeFirebase() {
+            try {
+                const firebaseConfig = await getFirebaseConfig();
+                if (!firebaseConfig) {
+                    throw new Error("⚠️ Firebase Config Load नहीं हुआ!");
                 }
-            }).then(() => {
-                alert("✅ Jobs Data Added Successfully!");
-            }).catch((error) => {
-                console.error("❌ Error:", error);
-            });
+
+                // ✅ Firebase Init
+                const app = initializeApp(firebaseConfig);
+                return getDatabase(app);
+            } catch (error) {
+                console.error("❌ Firebase Initialization Error:", error);
+                alert("🚨 Firebase लोड करने में दिक्कत आ रही है!");
+            }
+        }
+
+        async function setJobsData() {
+            try {
+                const db = await initializeFirebase();
+                if (!db) return;
+
+                // ✅ सरकारी नौकरियों का डेटा Firebase में डालना
+                await set(ref(db, "Jobs"), {
+                    job1: {
+                        title: "SSC CGL भर्ती 2025",
+                        company: "Staff Selection Commission",
+                        location: "भारत",
+                        applyLink: "https://ssc.nic.in"
+                    },
+                    job2: {
+                        title: "UPSC IAS भर्ती 2025",
+                        company: "Union Public Service Commission",
+                        location: "भारत",
+                        applyLink: "https://upsc.gov.in"
+                    },
+                    job3: {
+                        title: "Railway NTPC भर्ती 2025",
+                        company: "Indian Railways",
+                        location: "भारत",
+                        applyLink: "https://indianrailways.gov.in"
+                    }
+                });
+
+                alert("✅ सरकारी नौकरी डेटा सफलतापूर्वक जोड़ा गया!");
+            } catch (error) {
+                console.error("❌ Data Insertion Error:", error);
+                alert("🚨 डेटा जोड़ने में दिक्कत आ रही है!");
+            }
         }
     </script>
 </body>
