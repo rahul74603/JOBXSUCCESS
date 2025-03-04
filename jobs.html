@@ -13,33 +13,33 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import firebaseConfig from "./firebase-config.js"; // ✅ Firebase Config Import
 
-        async function loadFirebaseConfig() {
-            const response = await fetch("https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/firebase-config.json");
-            const firebaseConfig = await response.json();
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-            const app = initializeApp(firebaseConfig);
-            const db = getDatabase(app);
+        // Fetch Data from Firebase
+        function fetchJobs() {
+            const jobsList = document.getElementById("jobs-list");
+            const jobsRef = ref(db, "jobs");
 
-            function fetchJobs() {
-                const jobsList = document.getElementById("jobs-list");
-                const jobsRef = ref(db, "jobs");
-
-                onValue(jobsRef, (snapshot) => {
-                    jobsList.innerHTML = "";
-                    snapshot.forEach((child) => {
-                        const job = child.val();
+            onValue(jobsRef, (snapshot) => {
+                jobsList.innerHTML = ""; // पुरानी जॉब्स हटाएँ
+                const data = snapshot.val();
+                if (data) {
+                    Object.values(data).forEach((job) => {
                         const li = document.createElement("li");
                         li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
                         jobsList.appendChild(li);
                     });
-                });
-            }
-
-            fetchJobs();
+                } else {
+                    jobsList.innerHTML = "<p>कोई नौकरी उपलब्ध नहीं है।</p>";
+                }
+            });
         }
 
-        loadFirebaseConfig();
+        fetchJobs();
     </script>
 </body>
 </html>
