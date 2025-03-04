@@ -44,25 +44,28 @@
                 const db = await initializeFirebase();
                 if (!db) return;
 
-                // ✅ सरकारी नौकरियों का डेटा Firebase में डालना
+                // ✅ सरकारी नौकरियों का डेटा Firebase में डालना (अब lastDate भी शामिल है)
                 await set(ref(db, "Jobs"), {
                     job1: {
                         title: "SSC CGL भर्ती 2025",
                         company: "Staff Selection Commission",
                         location: "भारत",
-                        applyLink: "https://ssc.nic.in"
+                        applyLink: "https://ssc.nic.in",
+                        lastDate: "30 अप्रैल 2025"
                     },
                     job2: {
                         title: "UPSC IAS भर्ती 2025",
                         company: "Union Public Service Commission",
                         location: "भारत",
-                        applyLink: "https://upsc.gov.in"
+                        applyLink: "https://upsc.gov.in",
+                        lastDate: "15 मई 2025"
                     },
                     job3: {
                         title: "Railway NTPC भर्ती 2025",
                         company: "Indian Railways",
                         location: "भारत",
-                        applyLink: "https://indianrailways.gov.in"
+                        applyLink: "https://indianrailways.gov.in",
+                        lastDate: "10 जून 2025"
                     }
                 });
 
