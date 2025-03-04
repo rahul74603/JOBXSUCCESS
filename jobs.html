@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>सरकारी नौकरियाँ - JobXSuccess</title>
-    <link rel="stylesheet" href="style.css"> <!-- ✅ External CSS जोड़ा -->
+    <link rel="stylesheet" href="style.css"> <!-- ✅ External CSS -->
 </head>
 <body>
 
@@ -35,7 +35,7 @@
         // ✅ Firebase से सरकारी नौकरी की लिस्ट लोड करना
         function fetchJobs() {
             const jobsList = document.getElementById("jobs-list");
-            const jobsRef = ref(db, "Jobs"); // 🔹 Firebase Realtime Database में 'Jobs' Table का Reference
+            const jobsRef = ref(db, "Jobs");
 
             onValue(jobsRef, (snapshot) => {
                 jobsList.innerHTML = ""; // 🔹 पहले की लिस्ट क्लियर करें
@@ -72,5 +72,4 @@
     </script>
 
 </body>
-    <script type="module" src="main.js"></script>
 </html>
