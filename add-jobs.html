@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>डेटा जोड़ें - JobXSuccess</title>
+</head>
+<body>
+    <h1>Firebase में जॉब्स डेटा जोड़ें</h1>
+    <button onclick="setJobsData()">डेटा जोड़ें</button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import firebaseConfig from "./firebase-config.js"; // ✅ Firebase Config
+
+        // Firebase Init
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // ✅ Data Set Function
+        function setJobsData() {
+            set(ref(db, "jobs"), {
+                job1: {
+                    title: "SSC CGL भर्ती 2025",
+                    company: "Staff Selection Commission",
+                    location: "भारत",
+                    applyLink: "https://ssc.nic.in"
+                },
+                job2: {
+                    title: "UPSC IAS भर्ती 2025",
+                    company: "Union Public Service Commission",
+                    location: "भारत",
+                    applyLink: "https://upsc.gov.in"
+                },
+                job3: {
+                    title: "Railway NTPC भर्ती 2025",
+                    company: "Indian Railways",
+                    location: "भारत",
+                    applyLink: "https://indianrailways.gov.in"
+                }
+            }).then(() => {
+                alert("✅ Jobs Data Added Successfully!");
+            }).catch((error) => {
+                console.error("❌ Error:", error);
+            });
+        }
+    </script>
+</body>
+</html>
