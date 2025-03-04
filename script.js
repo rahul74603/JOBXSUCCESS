@@ -1,3 +1,4 @@
+// ✅ DOM Load होने के बाद Code Execute होगा
 document.addEventListener("DOMContentLoaded", async function () {
     const jobsList = document.getElementById("jobsList");
 
@@ -6,36 +7,42 @@ document.addEventListener("DOMContentLoaded", async function () {
         const configModule = await import("./firebase-config.js");
         const firebaseConfig = configModule.default;
 
-        // ✅ Firebase Initialize
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        // ✅ Firebase Modules Import करना
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-        const db = firebase.database().ref("Jobs"); // ✅ 'Jobs' Firebase में सही नोड है
+        // ✅ Firebase Initialize (Duplication से बचने के लिए)
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const jobsRef = ref(db, "Jobs"); // ✅ 'Jobs' Database का सही Path
 
-        // ✅ Firebase से जॉब्स लोड करना
-        db.once("value")
-            .then((snapshot) => {
-                const jobs = snapshot.val();
-                console.log("Fetched Jobs:", jobs); // 🔹 Debugging के लिए Console में Check करें
+        // ✅ Firebase से Realtime Data Listen करना
+        onValue(jobsRef, (snapshot) => {
+            jobsList.innerHTML = ""; // 🔹 पहले की लिस्ट क्लियर करें
+            const jobs = snapshot.val();
 
-                if (jobs) {
-                    jobsList.innerHTML = ""; // पहले से मौजूद लिस्ट हटाना
+            if (jobs) {
+                Object.keys(jobs).forEach((key) => {
+                    const job = jobs[key];
+                    const jobElement = document.createElement("li");
 
-                    Object.keys(jobs).forEach((key) => {
-                        const job = jobs[key];
-                        const jobElement = document.createElement("li");
-                        jobElement.innerHTML = `<strong>${job.title}</strong> - ${job.company}, ${job.location} <a href="${job.applyLink}" target="_blank">Apply</a>`;
-                        jobsList.appendChild(jobElement);
-                    });
-                } else {
-                    jobsList.innerHTML = "<li>कोई सरकारी नौकरी उपलब्ध नहीं</li>";
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching jobs:", error);
-            });
+                    // ✅ अगर कोई डेटा Missing है तो Default Value दें
+                    const title = job.title || "No Title";
+                    const company = job.company || "Unknown";
+                    const location = job.location || "N/A";
+                    const applyLink = job.applyLink || "#";
+
+                    jobElement.innerHTML = `
+                        <strong>${title}</strong> - ${company}, ${location} 
+                        <a href="${applyLink}" target="_blank">Apply</a>
+                    `;
+                    jobsList.appendChild(jobElement);
+                });
+            } else {
+                jobsList.innerHTML = "<li>⚠️ कोई सरकारी नौकरी उपलब्ध नहीं</li>";
+            }
+        });
     } catch (error) {
-        console.error("Error loading Firebase config:", error);
+        console.error("🔥 Error loading Firebase config:", error);
     }
 });
