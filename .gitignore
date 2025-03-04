@@ -1,4 +1,4 @@
-const firebaseConfig = {
+{
   apiKey: "AIzaSyDIDyD5MKcx3iQ2zHzpf_JPfUR3hxYlokQ",
   authDomain: "jobxsuccess.firebaseapp.com",
   databaseURL: "https://jobxsuccess-default-rtdb.asia-southeast1.firebasedatabase.app",
