@@ -4,48 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>सरकारी नौकरियाँ - JobXSuccess</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .job { border: 1px solid #ddd; margin: 10px; padding: 10px; border-radius: 5px; }
-        .job-title { font-size: 20px; color: #2E86C1; }
-        .job-description { margin: 10px 0; }
-        .apply-link { text-decoration: none; color: white; background: #2E86C1; padding: 10px 15px; border-radius: 5px; }
-    </style>
-    <!-- Firebase Configuration -->
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
-    <script>
-        // TODO: अपनी Firebase कॉन्फ़िगरेशन यहाँ जोड़ें
-        var firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        // Firebase इनिशियलाइज़ करें
-        firebase.initializeApp(firebaseConfig);
-    </script>
 </head>
 <body>
-    <h1>📌 नवीनतम सरकारी नौकरियाँ</h1>
-    <div id="jobs-container"></div>
+    <h1>सरकारी नौकरियाँ</h1>
+    <ul id="jobs-list"></ul>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
 
     <script>
-        // डेटाबेस रेफरेंस
-        var jobsRef = firebase.database().ref('jobs');
+        // Firebase Configuration
+        const firebaseConfig = {
+            databaseURL: "https://jobxsuccess-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
 
-        // डेटा फेच करें
-        jobsRef.on('value', function(snapshot) {
-            var jobsContainer = document.getElementById('jobs-container');
-            jobsContainer.innerHTML = ''; // पहले से मौजूद कंटेंट साफ़ करें
-            snapshot.forEach(function(childSnapshot) {
-                var job = childSnapshot.val();
-                var jobElement = document.createElement('div');
-                jobElement.className = 'job';
-                jobElement.innerHTML = `
-                    <div class="job-title">${job.title}</div>
-                    <div class="job-description">${job.description}</div>
-                    <a class="apply-link" href="${job.applyLink}"39
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Fetch Data
+        function fetchJobs() {
+            const jobsList = document.getElementById("jobs-list");
+            database.ref("jobs").once("value", (snapshot) => {
+                snapshot.forEach((child) => {
+                    const job = child.val();
+                    const li = document.createElement("li");
+                    li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
+                    jobsList.appendChild(li);
+                });
+            });
+        }
+
+        fetchJobs();
+    </script>
+</body>
+</html>
