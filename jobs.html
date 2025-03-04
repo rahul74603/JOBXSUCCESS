@@ -1,25 +1,40 @@
-<script type="module">
-    import { firebaseConfig } from "./secrets.js"; // 🔴 secrets.js को Import किया
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>सरकारी नौकरियाँ - JobXSuccess</title>
+</head>
+<body>
+    <h1>सरकारी नौकरियाँ</h1>
+    <ul id="jobs-list"></ul>
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+    <!-- ✅ Firebase का नया कोड -->
+    <script type="module">
+        // 🔴 secrets.js से Firebase Config को Import कर रहे हैं
+        import { firebaseConfig } from "./secrets.js";  
 
-    // ✅ Firebase Initialize
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-    // ✅ Firebase से Data लाने के लिए
-    const jobsList = document.getElementById("jobs-list");
-    const jobsRef = ref(db, "jobs");
+        // ✅ Firebase Initialize
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-    onValue(jobsRef, (snapshot) => {
-        jobsList.innerHTML = ""; // पहले की लिस्ट हटाओ
-        const data = snapshot.val();
-        for (let key in data) {
-            const job = data[key];
-            const li = document.createElement("li");
-            li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
-            jobsList.appendChild(li);
-        }
-    });
-</script>
+        // ✅ Firebase से Data लाने के लिए
+        const jobsList = document.getElementById("jobs-list");
+        const jobsRef = ref(db, "jobs");
+
+        onValue(jobsRef, (snapshot) => {
+            jobsList.innerHTML = ""; // पहले की लिस्ट हटाओ
+            const data = snapshot.val();
+            for (let key in data) {
+                const job = data[key];
+                const li = document.createElement("li");
+                li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
+                jobsList.appendChild(li);
+            }
+        });
+    </script>
+</body>
+</html>
