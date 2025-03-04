@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             firebase.initializeApp(firebaseConfig);
         }
 
-        const db = firebase.database().ref("jobs"); // 🔹 'jobs' Firebase में table का नाम है
+        const db = firebase.database().ref("Jobs"); // ✅ 'Jobs' Firebase में सही नोड है
 
         // ✅ Firebase से जॉब्स लोड करना
         db.once("value")
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     Object.keys(jobs).forEach((key) => {
                         const job = jobs[key];
                         const jobElement = document.createElement("li");
-                        jobElement.innerHTML = `<strong>${job.title}</strong> भर्ती ${job.year}: ${job.lastDate} <a href="${job.applyLink}" target="_blank">Apply</a>`;
+                        jobElement.innerHTML = `<strong>${job.title}</strong> - ${job.company}, ${job.location} <a href="${job.applyLink}" target="_blank">Apply</a>`;
                         jobsList.appendChild(jobElement);
                     });
                 } else {
