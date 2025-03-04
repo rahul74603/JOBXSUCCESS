@@ -1,15 +1,41 @@
-// Firebase SDKs Import
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { firebaseConfig } from "./secrets.js";  // 🔹 API Key को Secure तरीके से Import किया
+document.addEventListener("DOMContentLoaded", async function () {
+    const jobsList = document.getElementById("jobsList");
 
-// Firebase Initialize
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+    try {
+        // ✅ firebase-config.js से Firebase config import करना
+        const configModule = await import("./firebase-config.js");
+        const firebaseConfig = configModule.default;
 
-// Firebase से Data लाने के लिए
-const jobsRef = ref(db, "jobs");
-onValue(jobsRef, (snapshot) => {
-    const data = snapshot.val();
-    console.log(data);  // 🔹 Console में चेक करने के लिए
+        // ✅ Firebase Initialize
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const db = firebase.database().ref("jobs"); // 🔹 'jobs' Firebase में table का नाम है
+
+        // ✅ Firebase से जॉब्स लोड करना
+        db.once("value")
+            .then((snapshot) => {
+                const jobs = snapshot.val();
+                console.log("Fetched Jobs:", jobs); // 🔹 Debugging के लिए Console में Check करें
+
+                if (jobs) {
+                    jobsList.innerHTML = ""; // पहले से मौजूद लिस्ट हटाना
+
+                    Object.keys(jobs).forEach((key) => {
+                        const job = jobs[key];
+                        const jobElement = document.createElement("li");
+                        jobElement.innerHTML = `<strong>${job.title}</strong> भर्ती ${job.year}: ${job.lastDate} <a href="${job.applyLink}" target="_blank">Apply</a>`;
+                        jobsList.appendChild(jobElement);
+                    });
+                } else {
+                    jobsList.innerHTML = "<li>कोई सरकारी नौकरी उपलब्ध नहीं</li>";
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching jobs:", error);
+            });
+    } catch (error) {
+        console.error("Error loading Firebase config:", error);
+    }
 });
