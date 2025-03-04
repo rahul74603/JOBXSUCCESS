@@ -9,32 +9,40 @@
     <h1>सरकारी नौकरियाँ</h1>
     <ul id="jobs-list"></ul>
 
-    <!-- ✅ Firebase का नया कोड -->
-    <script type="module">
-        // 🔴 secrets.js से Firebase Config को Import कर रहे हैं
-        import { firebaseConfig } from "./secrets.js";  
+    <!-- secrets.js को पहले Load करना जरूरी है -->
+    <script src="secrets.js"></script>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Firebase Modules Import
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-        // ✅ Firebase Initialize
+        // ✅ secrets.js से Firebase Config लाओ
+        const firebaseConfig = window.firebaseConfig;
+
+        // ✅ Firebase Initialize करो
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // ✅ Firebase से Data लाने के लिए
-        const jobsList = document.getElementById("jobs-list");
-        const jobsRef = ref(db, "jobs");
+        // ✅ Data Fetching Function
+        function fetchJobs() {
+            const jobsList = document.getElementById("jobs-list");
+            const jobsRef = ref(db, "jobs");
 
-        onValue(jobsRef, (snapshot) => {
-            jobsList.innerHTML = ""; // पहले की लिस्ट हटाओ
-            const data = snapshot.val();
-            for (let key in data) {
-                const job = data[key];
-                const li = document.createElement("li");
-                li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
-                jobsList.appendChild(li);
-            }
-        });
+            onValue(jobsRef, (snapshot) => {
+                jobsList.innerHTML = ""; // पुराना डेटा हटाओ
+                snapshot.forEach((child) => {
+                    const job = child.val();
+                    const li = document.createElement("li");
+                    li.innerHTML = `<strong>${job.title}</strong>: ${job.description} <a href="${job.applyLink}" target="_blank">Apply</a>`;
+                    jobsList.appendChild(li);
+                });
+            });
+        }
+
+        // ✅ फ़ंक्शन को Call करो
+        fetchJobs();
     </script>
 </body>
 </html>
