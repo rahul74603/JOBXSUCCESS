@@ -21,59 +21,42 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-        import getFirebaseConfig from "./config.js"; // ✅ Secure Firebase Config Import
+        import firebaseConfig from "./firebase-config.js"; // ✅ Secure Firebase Config Import
 
-        async function initializeFirebase() {
-            try {
-                const firebaseConfig = await getFirebaseConfig();
-                if (!firebaseConfig) {
-                    throw new Error("⚠️ Firebase Config Load नहीं हुआ!");
+        // ✅ Firebase Init
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // ✅ सरकारी नौकरी का डेटा Firebase में डालना
+        function setJobsData() {
+            set(ref(db, "Jobs"), {
+                job1: {
+                    title: "SSC CGL भर्ती 2025",
+                    company: "Staff Selection Commission",
+                    location: "भारत",
+                    lastDate: "15 अप्रैल 2025",
+                    applyLink: "https://ssc.nic.in"
+                },
+                job2: {
+                    title: "UPSC IAS भर्ती 2025",
+                    company: "Union Public Service Commission",
+                    location: "भारत",
+                    lastDate: "20 मई 2025",
+                    applyLink: "https://upsc.gov.in"
+                },
+                job3: {
+                    title: "Railway NTPC भर्ती 2025",
+                    company: "Indian Railways",
+                    location: "भारत",
+                    lastDate: "10 जून 2025",
+                    applyLink: "https://indianrailways.gov.in"
                 }
-
-                // ✅ Firebase Init
-                const app = initializeApp(firebaseConfig);
-                return getDatabase(app);
-            } catch (error) {
-                console.error("❌ Firebase Initialization Error:", error);
-                alert("🚨 Firebase लोड करने में दिक्कत आ रही है!");
-            }
-        }
-
-        async function setJobsData() {
-            try {
-                const db = await initializeFirebase();
-                if (!db) return;
-
-                // ✅ सरकारी नौकरियों का डेटा Firebase में डालना (अब lastDate भी शामिल है)
-                await set(ref(db, "Jobs"), {
-                    job1: {
-                        title: "SSC CGL भर्ती 2025",
-                        company: "Staff Selection Commission",
-                        location: "भारत",
-                        applyLink: "https://ssc.nic.in",
-                        lastDate: "30 अप्रैल 2025"
-                    },
-                    job2: {
-                        title: "UPSC IAS भर्ती 2025",
-                        company: "Union Public Service Commission",
-                        location: "भारत",
-                        applyLink: "https://upsc.gov.in",
-                        lastDate: "15 मई 2025"
-                    },
-                    job3: {
-                        title: "Railway NTPC भर्ती 2025",
-                        company: "Indian Railways",
-                        location: "भारत",
-                        applyLink: "https://indianrailways.gov.in",
-                        lastDate: "10 जून 2025"
-                    }
-                });
-
+            }).then(() => {
                 alert("✅ सरकारी नौकरी डेटा सफलतापूर्वक जोड़ा गया!");
-            } catch (error) {
-                console.error("❌ Data Insertion Error:", error);
+            }).catch((error) => {
+                console.error("❌ डेटा जोड़ने में एरर:", error);
                 alert("🚨 डेटा जोड़ने में दिक्कत आ रही है!");
-            }
+            });
         }
     </script>
 </body>
