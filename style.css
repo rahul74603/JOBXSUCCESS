@@ -1,27 +1,90 @@
+/* बेसिक स्टाइलिंग */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
     background-color: #f8f9fa;
-    margin: 20px;
+    margin: 0;
+    padding: 0;
 }
 
+/* Navbar स्टाइल */
+.navbar {
+    background: #2E86C1;
+    padding: 15px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    margin: 15px;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    background: #1B4F72;
+    border-radius: 5px;
+}
+
+.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* हेडिंग */
 h1 {
     color: #dc3545;
+    margin-top: 20px;
 }
 
+/* जॉब सेक्शन */
 #jobs-container {
     background: white;
     padding: 20px;
-    margin: 10px auto;
+    margin: 20px auto;
     width: 90%;
     max-width: 500px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
+/* जॉब कार्ड */
 .job {
-    padding: 10px;
+    padding: 15px;
     margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #fff;
+    transition: 0.3s;
+}
+
+.job:hover {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+}
+
+/* बटन */
+.menu a {
+    text-decoration: none;
+    color: white;
+    background: #28a745;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    background: #218838;
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    padding: 10px;
+    background: #343a40;
+    color: white;
+    font-size: 14px;
 }
