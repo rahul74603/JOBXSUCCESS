@@ -1,16 +1,15 @@
-
-/* ðŸŒŸ à¤¬à¥‡à¤¸à¤¿à¤• à¤¸à¥à¤Ÿà¤¾à¤‡à¤²à¤¿à¤‚à¤— */
+/* 🌟 बेसिक स्टाइलिंग */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     text-align: center;
     background-color: #f8f9fa;
     margin: 0;
     padding: 0;
 }
 
-/* ðŸŒŸ Navbar à¤¸à¥à¤Ÿà¤¾à¤‡à¤² */
+/* 🌟 Navbar स्टाइल */
 .navbar {
-    background: #2E86C1;
+    background: #007BFF;
     padding: 15px;
     display: flex;
     justify-content: center;
@@ -21,27 +20,27 @@ body {
     color: white;
     text-decoration: none;
     font-size: 18px;
+    font-weight: bold;
     padding: 10px;
     border-radius: 5px;
     transition: 0.3s;
 }
 
 .navbar a:hover {
-    background: #1B4F72;
+    background: #0056b3;
 }
 
 .active {
-    font-weight: bold;
     text-decoration: underline;
 }
 
-/* ðŸŒŸ à¤¹à¥‡à¤¡à¤¿à¤‚à¤— */
+/* 🌟 हेडिंग */
 h1 {
-    color: #dc3545;
+    color: #DC3545;
     margin-top: 20px;
 }
 
-/* ðŸŒŸ à¤œà¥‰à¤¬ à¤¸à¥‡à¤•à¥à¤¶à¤¨ */
+/* 🌟 जॉब सेक्शन */
 #jobs-container {
     background: white;
     padding: 20px;
@@ -52,29 +51,33 @@ h1 {
     border-radius: 8px;
 }
 
-/* ðŸŒŸ à¤œà¥‰à¤¬ à¤•à¤¾à¤°à¥à¤¡ */
+/* 🌟 जॉब कार्ड */
 .job-card {
     padding: 15px;
     margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #fff;
-    transition: 0.3s;
+    background: linear-gradient(135deg, #E3F2FD, #90CAF9);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     text-align: left;
 }
 
-.job-card:hover {
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(1.02);
+.job-card h3 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 5px;
 }
 
-/* ðŸŒŸ à¤¬à¤Ÿà¤¨ */
+.job-card p {
+    margin: 5px 0;
+}
+
+/* 🌟 अप्लाई बटन */
 .apply-btn {
     text-decoration: none;
     color: white;
     background: #28a745;
-    padding: 10px 20px;
-    margin: 10px;
+    padding: 10px 15px;
     border-radius: 5px;
     display: inline-block;
     transition: 0.3s;
@@ -84,7 +87,37 @@ h1 {
     background: #218838;
 }
 
-/* ðŸŒŸ Footer */
+/* 🌟 स्टडी मैटेरियल सेक्शन */
+#materials-list {
+    list-style: none;
+    padding: 0;
+}
+
+.study-item {
+    background: #FFF3CD;
+    padding: 10px;
+    border: 1px solid #FFEEBA;
+    margin: 5px 0;
+    border-radius: 5px;
+    text-align: left;
+}
+
+/* 🌟 डाउनलोड बटन */
+.download-btn {
+    text-decoration: none;
+    color: white;
+    background: #007BFF;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.download-btn:hover {
+    background: #0056b3;
+}
+
+/* 🌟 Footer */
 footer {
     margin-top: 20px;
     padding: 10px;
