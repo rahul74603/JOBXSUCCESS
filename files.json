@@ -1,0 +1,28 @@
+{
+  "folders": [
+    {
+      "name": "📌 Current Affairs",
+      "path": "study-materials/Current-affairs/index.html"
+    },
+    {
+      "name": "📌 English",
+      "path": "study-materials/english/index.html"
+    },
+    {
+      "name": "📌 General Knowledge",
+      "path": "study-materials/general-knowledge/index.html"
+    },
+    {
+      "name": "📌 Mathematics",
+      "path": "study-materials/mathematics/index.html"
+    },
+    {
+      "name": "📌 Reasoning",
+      "path": "study-materials/reasoning/index.html"
+    },
+    {
+      "name": "📌 Science",
+      "path": "study-materials/science/index.html"
+    }
+  ]
+}
