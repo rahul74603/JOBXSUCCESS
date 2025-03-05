@@ -1,7 +1,19 @@
 document.addEventListener("DOMContentLoaded", async function () {
+    // ✅ Firebase SDK लोड करना (जरूरी)
+    if (typeof firebase === "undefined") {
+        const firebaseScript = document.createElement("script");
+        firebaseScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        firebaseScript.onload = () => {
+            const dbScript = document.createElement("script");
+            dbScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+            document.head.appendChild(dbScript);
+        };
+        document.head.appendChild(firebaseScript);
+    }
+
     // ✅ Government Jobs Load करने का Code
     const jobsList = document.getElementById("jobsList");
-    
+
     try {
         // 🔹 firebase-config.js से Firebase config import करना
         const configModule = await import("./firebase-config.js");
@@ -50,12 +62,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     const studyList = document.getElementById("studyList");
     
     async function fetchGitHubFolders() {
-        const githubRepo = "https://api.github.com/repos/तुम्हारा-गिटहब-यूज़रनेम/तुम्हारा-रिपॉ-नेम/contents/study%20materials";
-        
+        const githubRepo = "https://api.github.com/repos/jobxsuccess/study-materials/contents";
+
         try {
             const response = await fetch(githubRepo);
+            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+            
             const folders = await response.json();
-
             studyList.innerHTML = ""; // 🔹 पहले की लिस्ट हटाना
 
             if (Array.isArray(folders)) {
@@ -80,12 +93,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // ✅ जब कोई कैटेगरी खुले, तो अंदर के सब-फोल्डर्स लोड करें
     window.loadCategory = async function (category) {
-        const categoryRepo = `https://api.github.com/repos/तुम्हारा-गिटहब-यूज़रनेम/तुम्हारा-रिपॉ-नेम/contents/study%20materials/${category}`;
+        const categoryRepo = `https://api.github.com/repos/jobxsuccess/study-materials/contents/${category}`;
 
         try {
             const response = await fetch(categoryRepo);
+            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+            
             const subFolders = await response.json();
-
             studyList.innerHTML = `<h3>${category}</h3>`; // 🔹 Header अपडेट करें
 
             if (Array.isArray(subFolders)) {
@@ -108,12 +122,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // ✅ जब कोई फ़ोल्डर खुले, तो फ़ाइलें लोड करें
     window.loadFiles = async function (category, subCategory) {
-        const filesRepo = `https://api.github.com/repos/तुम्हारा-गिटहब-यूज़रनेम/तुम्हारा-रिपॉ-नेम/contents/study%20materials/${category}/${subCategory}`;
+        const filesRepo = `https://api.github.com/repos/jobxsuccess/study-materials/contents/${category}/${subCategory}`;
 
         try {
             const response = await fetch(filesRepo);
+            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+            
             const files = await response.json();
-
             studyList.innerHTML = `<h3>${subCategory} (📂 ${category})</h3>`; // 🔹 Header अपडेट करें
 
             if (Array.isArray(files)) {
