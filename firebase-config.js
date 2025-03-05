@@ -1,3 +1,6 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
 const firebaseConfig = {
     apiKey: "AIzaSyDIDyD5MKcx3iQ2zHzpf_JPfUR3hxYlokQ",
     authDomain: "jobxsuccess.firebaseapp.com",
@@ -8,4 +11,7 @@ const firebaseConfig = {
     appId: "1:300111417927:web:3f5240df7cb12f3941d762"
 };
 
-export default firebaseConfig;
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+export { database, ref, onValue };
