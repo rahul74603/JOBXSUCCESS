@@ -6,39 +6,42 @@ document.addEventListener("DOMContentLoaded", async function () {
         firebaseScript.onload = () => {
             const dbScript = document.createElement("script");
             dbScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+            dbScript.onload = initializeFirebase; // ✅ Firebase लोड होने के बाद इनिशियलाइज़ करें
             document.head.appendChild(dbScript);
         };
         document.head.appendChild(firebaseScript);
+    } else {
+        initializeFirebase(); // ✅ अगर Firebase पहले से लोड है तो इनिशियलाइज़ करें
     }
 
-    // ✅ Government Jobs Load करने का Code
-    const jobsList = document.getElementById("jobsList");
+    function initializeFirebase() {
+        import("./firebase-config.js")
+            .then((configModule) => {
+                const firebaseConfig = configModule.default;
 
-    try {
-        // 🔹 firebase-config.js से Firebase config import करना
-        const configModule = await import("./firebase-config.js");
-        const firebaseConfig = configModule.default;
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
 
-        // 🔹 Firebase Initialize (अगर पहले से नहीं हुआ हो)
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+                loadJobs(); // ✅ Firebase से Jobs लोड करना
+            })
+            .catch((error) => console.error("❌ Error loading Firebase config:", error));
+    }
 
-        const db = firebase.database().ref("jobs"); // ✅ 'jobs' सही Database Path
+    // ✅ Jobs लोड करने का फंक्शन
+    function loadJobs() {
+        const jobsList = document.getElementById("jobsList");
+        const db = firebase.database().ref("jobs");
 
-        // 🔹 Firebase से Jobs तेजी से लोड करें
         db.on("value", (snapshot) => {
-            jobsList.innerHTML = ""; // 🔹 पहले की लिस्ट हटाना
+            jobsList.innerHTML = ""; // ✅ पहले की लिस्ट हटाएँ
             const jobs = snapshot.val();
 
             if (jobs) {
                 Object.keys(jobs).forEach((key) => {
                     const job = jobs[key];
-
-                    // 🔹 Deadline चेक करना (अगर नहीं है तो छिपा दो)
                     const deadlineText = job.lastDate ? `📅 Last Date: ${job.lastDate}` : "";
-
-                    // 🔹 HTML Structure
+                    
                     const jobElement = document.createElement("li");
                     jobElement.innerHTML = `
                         <div class="job-card">
@@ -54,22 +57,20 @@ document.addEventListener("DOMContentLoaded", async function () {
                 jobsList.innerHTML = "<li>कोई सरकारी नौकरी उपलब्ध नहीं</li>";
             }
         });
-    } catch (error) {
-        console.error("❌ Error loading Firebase config:", error);
     }
 
     // ✅ Study Materials Load करने का Code (GitHub से)
     const studyList = document.getElementById("studyList");
-    
+
     async function fetchGitHubFolders() {
         const githubRepo = "https://api.github.com/repos/jobxsuccess/study-materials/contents";
 
         try {
             const response = await fetch(githubRepo);
             if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-            
+
             const folders = await response.json();
-            studyList.innerHTML = ""; // 🔹 पहले की लिस्ट हटाना
+            studyList.innerHTML = ""; // ✅ पहले की लिस्ट हटाएँ
 
             if (Array.isArray(folders)) {
                 folders.forEach(folder => {
@@ -89,7 +90,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    fetchGitHubFolders(); // 🔹 GitHub से Study Materials लोड करो
+    fetchGitHubFolders(); // ✅ GitHub से Study Materials लोड करो
 
     // ✅ जब कोई कैटेगरी खुले, तो अंदर के सब-फोल्डर्स लोड करें
     window.loadCategory = async function (category) {
@@ -98,9 +99,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
             const response = await fetch(categoryRepo);
             if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-            
+
             const subFolders = await response.json();
-            studyList.innerHTML = `<h3>${category}</h3>`; // 🔹 Header अपडेट करें
+            studyList.innerHTML = `<h3>${category}</h3>`; // ✅ Header अपडेट करें
 
             if (Array.isArray(subFolders)) {
                 subFolders.forEach(subFolder => {
@@ -127,9 +128,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
             const response = await fetch(filesRepo);
             if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-            
+
             const files = await response.json();
-            studyList.innerHTML = `<h3>${subCategory} (📂 ${category})</h3>`; // 🔹 Header अपडेट करें
+            studyList.innerHTML = `<h3>${subCategory} (📂 ${category})</h3>`; // ✅ Header अपडेट करें
 
             if (Array.isArray(files)) {
                 files.forEach(file => {
