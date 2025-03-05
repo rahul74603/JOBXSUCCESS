@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 Study Materials - JobXSuccess</title>
-    <link rel="stylesheet" href="style.css"> <!-- ✅ External CSS जोड़ा -->
+    <title>📚 Study Materials - JOBXSUCCESS</title>
+    <link rel="stylesheet" href="style.css"> <!-- ✅ External CSS -->
 </head>
 <body>
 
@@ -18,26 +18,43 @@
     <h1>📚 फ्री स्टडी मटेरियल्स</h1>
 
     <div id="materials-container">
-        <ul id="materials-list"></ul>
+        <h2>📂 Firebase से स्टडी मटेरियल</h2>
+        <ul id="firebase-materials"></ul>
+
+        <h2>📂 GitHub से स्टडी मटेरियल</h2>
+        <ul id="github-materials"></ul>
     </div>
 
     <!-- 🔥 Firebase SDK + Config -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-        import firebaseConfig from "./firebase-config.js"; // ✅ Firebase Config Import
 
-        // ✅ Firebase Initialize
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        // ✅ Firebase Config को fetch() से लोड करें
+        async function loadFirebaseConfig() {
+            try {
+                const response = await fetch("./firebase-config.json"); // ✅ JSON Config फाइल
+                const firebaseConfig = await response.json();
+                return firebaseConfig;
+            } catch (error) {
+                console.error("❌ Firebase Config लोड करने में दिक्कत:", error);
+                return null;
+            }
+        }
 
         // ✅ Firebase से Study Materials लोड करना
-        function fetchMaterials() {
-            const materialsList = document.getElementById("materials-list");
-            const materialsRef = ref(db, "StudyMaterials"); // 🔹 Firebase Realtime Database में 'StudyMaterials' का Reference
+        async function fetchMaterials() {
+            const firebaseConfig = await loadFirebaseConfig();
+            if (!firebaseConfig) return; // अगर Config लोड नहीं हुआ, तो आगे मत बढ़ो।
+
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
+
+            const materialsList = document.getElementById("firebase-materials");
+            const materialsRef = ref(db, "StudyMaterials");
 
             onValue(materialsRef, (snapshot) => {
-                materialsList.innerHTML = ""; // 🔹 पहले की लिस्ट क्लियर करें
+                materialsList.innerHTML = "";
                 const data = snapshot.val();
 
                 if (data) {
@@ -45,11 +62,9 @@
                         const material = data[key];
                         const li = document.createElement("li");
 
-                        // ✅ अगर कोई डेटा मिसिंग है तो "N/A" दिखाएं
                         const title = material.title || "N/A";
                         const downloadLink = material.link || "#";
 
-                        li.classList.add("material-item"); // ✅ CSS Class Add की
                         li.innerHTML = `
                             <h3>🔹 ${title}</h3>
                             <a href="${downloadLink}" target="_blank" class="download-btn">📥 Download Now</a>
@@ -62,7 +77,99 @@
             });
         }
 
-        fetchMaterials(); // ✅ फंक्शन को कॉल करना मत भूलना!
+        fetchMaterials();
+
+        // ✅ GitHub से Study Materials लोड करना
+        async function fetchGitHubMaterials() {
+            const githubRepo = "https://api.github.com/repos/JOBXSUCCESS/study-materials/contents";
+            const githubList = document.getElementById("github-materials");
+
+            try {
+                const response = await fetch(githubRepo);
+                if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+
+                const folders = await response.json();
+                githubList.innerHTML = "";
+
+                if (Array.isArray(folders)) {
+                    folders.forEach(folder => {
+                        if (folder.type === "dir") {
+                            const li = document.createElement("li");
+                            li.innerHTML = `
+                                <a href="#" onclick="loadCategory('${folder.name}')">${folder.name}</a>
+                            `;
+                            githubList.appendChild(li);
+                        }
+                    });
+                } else {
+                    githubList.innerHTML = "<p>⚠️ कोई स्टडी मटेरियल उपलब्ध नहीं है।</p>";
+                }
+            } catch (error) {
+                console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
+            }
+        }
+
+        fetchGitHubMaterials();
+
+        // ✅ जब कोई कैटेगरी खुले, तो अंदर के फोल्डर लोड करें
+        window.loadCategory = async function (category) {
+            const categoryRepo = `https://api.github.com/repos/JOBXSUCCESS/study-materials/contents/${category}`;
+            const githubList = document.getElementById("github-materials");
+
+            try {
+                const response = await fetch(categoryRepo);
+                if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+
+                const subFolders = await response.json();
+                githubList.innerHTML = `<h3>${category}</h3>`;
+
+                if (Array.isArray(subFolders)) {
+                    subFolders.forEach(subFolder => {
+                        if (subFolder.type === "dir") {
+                            const li = document.createElement("li");
+                            li.innerHTML = `
+                                <a href="#" onclick="loadFiles('${category}', '${subFolder.name}')">${subFolder.name}</a>
+                            `;
+                            githubList.appendChild(li);
+                        }
+                    });
+                } else {
+                    githubList.innerHTML += "<p>⚠️ इस कैटेगरी में कुछ नहीं मिला।</p>";
+                }
+            } catch (error) {
+                console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
+            }
+        };
+
+        // ✅ जब कोई फोल्डर खुले, तो फाइलें लोड करें
+        window.loadFiles = async function (category, subCategory) {
+            const filesRepo = `https://api.github.com/repos/JOBXSUCCESS/study-materials/contents/${category}/${subCategory}`;
+            const githubList = document.getElementById("github-materials");
+
+            try {
+                const response = await fetch(filesRepo);
+                if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+
+                const files = await response.json();
+                githubList.innerHTML = `<h3>${subCategory} (📂 ${category})</h3>`;
+
+                if (Array.isArray(files)) {
+                    files.forEach(file => {
+                        if (file.type === "file") {
+                            const li = document.createElement("li");
+                            li.innerHTML = `
+                                <a href="${file.download_url}" target="_blank">📄 ${file.name}</a>
+                            `;
+                            githubList.appendChild(li);
+                        }
+                    });
+                } else {
+                    githubList.innerHTML += "<p>⚠️ इस फोल्डर में कुछ नहीं मिला।</p>";
+                }
+            } catch (error) {
+                console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
+            }
+        };
     </script>
 
 </body>
