@@ -60,93 +60,29 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // ✅ Study Materials Load करने का Code (GitHub से)
-    const studyList = document.getElementById("studyList");
-
-    async function fetchGitHubFolders() {
-        const githubRepo = "https://api.github.com/repos/jobxsuccess/study-materials/contents";
-
+    async function fetchStudyMaterials() {
         try {
-            const response = await fetch(githubRepo);
-            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+            const url = "https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials";
+            const response = await fetch(url);
+            
+            if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+            
+            const data = await response.json();
+            const materialsList = document.getElementById("materials-list");
 
-            const folders = await response.json();
-            studyList.innerHTML = ""; // ✅ पहले की लिस्ट हटाएँ
+            materialsList.innerHTML = ""; // पुरानी लिस्ट क्लियर करें
 
-            if (Array.isArray(folders)) {
-                folders.forEach(folder => {
-                    if (folder.type === "dir") {
-                        const folderElement = document.createElement("li");
-                        folderElement.innerHTML = `
-                            <a href="#" onclick="loadCategory('${folder.name}')">${folder.name}</a>
-                        `;
-                        studyList.appendChild(folderElement);
-                    }
-                });
-            } else {
-                studyList.innerHTML = "<li>कोई स्टडी मटेरियल उपलब्ध नहीं</li>";
-            }
+            data.forEach(item => {
+                const li = document.createElement("li");
+                li.innerHTML = `<h3>📁 ${item.name}</h3>
+                                <a href="${item.html_url}" target="_blank" class="download-btn">🔗 Open</a>`;
+                materialsList.appendChild(li);
+            });
+
         } catch (error) {
-            console.error("❌ Error fetching GitHub folders:", error);
+            console.error("Error fetching study materials:", error);
         }
     }
 
-    fetchGitHubFolders(); // ✅ GitHub से Study Materials लोड करो
-
-    // ✅ जब कोई कैटेगरी खुले, तो अंदर के सब-फोल्डर्स लोड करें
-    window.loadCategory = async function (category) {
-        const categoryRepo = `https://api.github.com/repos/jobxsuccess/study-materials/contents/${category}`;
-
-        try {
-            const response = await fetch(categoryRepo);
-            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-
-            const subFolders = await response.json();
-            studyList.innerHTML = `<h3>${category}</h3>`; // ✅ Header अपडेट करें
-
-            if (Array.isArray(subFolders)) {
-                subFolders.forEach(subFolder => {
-                    if (subFolder.type === "dir") {
-                        const subFolderElement = document.createElement("li");
-                        subFolderElement.innerHTML = `
-                            <a href="#" onclick="loadFiles('${category}', '${subFolder.name}')">${subFolder.name}</a>
-                        `;
-                        studyList.appendChild(subFolderElement);
-                    }
-                });
-            } else {
-                studyList.innerHTML += "<li>इस कैटेगरी में कुछ नहीं मिला</li>";
-            }
-        } catch (error) {
-            console.error("❌ Error fetching category:", error);
-        }
-    };
-
-    // ✅ जब कोई फ़ोल्डर खुले, तो फ़ाइलें लोड करें
-    window.loadFiles = async function (category, subCategory) {
-        const filesRepo = `https://api.github.com/repos/jobxsuccess/study-materials/contents/${category}/${subCategory}`;
-
-        try {
-            const response = await fetch(filesRepo);
-            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-
-            const files = await response.json();
-            studyList.innerHTML = `<h3>${subCategory} (📂 ${category})</h3>`; // ✅ Header अपडेट करें
-
-            if (Array.isArray(files)) {
-                files.forEach(file => {
-                    if (file.type === "file") {
-                        const fileElement = document.createElement("li");
-                        fileElement.innerHTML = `
-                            <a href="${file.download_url}" target="_blank">📄 ${file.name}</a>
-                        `;
-                        studyList.appendChild(fileElement);
-                    }
-                });
-            } else {
-                studyList.innerHTML += "<li>इस फोल्डर में कुछ नहीं मिला</li>";
-            }
-        } catch (error) {
-            console.error("❌ Error fetching files:", error);
-        }
-    };
+    fetchStudyMaterials(); // ✅ GitHub से Study Materials लोड करो
 });
