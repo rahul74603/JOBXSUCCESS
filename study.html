@@ -17,6 +17,9 @@
 
     <h1>📚 फ्री स्टडी मटेरियल्स</h1>
 
+    <!-- 🔙 Back Button -->
+    <button onclick="goBack()" class="back-btn">⬅️ Back</button>
+
     <div id="materials-container">
         <h2>📂 Firebase से स्टडी मटेरियल</h2>
         <ul id="firebase-materials">⏳ लोड हो रहा है...</ul>
@@ -155,6 +158,22 @@
                 }
             } catch (error) {
                 console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
+            }
+        };
+
+        // 🔙 Back Button Function
+        function goBack() {
+            window.history.back();
+        }
+
+        // ❌ Page Refresh पर Issue Fix करने के लिए (Prevent Auto-Back)
+        if (performance.navigation.type === 1) {
+            sessionStorage.setItem("reloadPage", "true");
+        }
+
+        window.onload = function () {
+            if (sessionStorage.getItem("reloadPage") === "true") {
+                sessionStorage.removeItem("reloadPage");
             }
         };
     </script>
