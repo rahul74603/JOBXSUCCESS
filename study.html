@@ -28,154 +28,26 @@
         <ul id="github-materials">⏳ लोड हो रहा है...</ul>
     </div>
 
-    <!-- 🔥 Firebase SDK + Config -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
-        async function loadFirebaseConfig() {
-            try {
-                const response = await fetch("./firebase-config.json");
-                const firebaseConfig = await response.json();
-                return firebaseConfig;
-            } catch (error) {
-                console.error("❌ Firebase Config लोड करने में दिक्कत:", error);
-                return null;
-            }
-        }
-
-        async function fetchMaterials() {
-            const firebaseConfig = await loadFirebaseConfig();
-            if (!firebaseConfig) return;
-
-            const app = initializeApp(firebaseConfig);
-            const db = getDatabase(app);
-
-            const materialsList = document.getElementById("firebase-materials");
-            const materialsRef = ref(db, "StudyMaterials");
-
-            onValue(materialsRef, (snapshot) => {
-                materialsList.innerHTML = "";
-                const data = snapshot.val();
-
-                if (data) {
-                    Object.keys(data).forEach((key) => {
-                        const material = data[key];
-                        const li = document.createElement("li");
-
-                        const title = material.title || "N/A";
-                        const downloadLink = material.link || "#";
-
-                        li.innerHTML = `<h3>🔹 ${title}</h3>
-                                        <a href="${downloadLink}" target="_blank" class="download-btn">📥 Download Now</a>`;
-                        materialsList.appendChild(li);
-                    });
-                } else {
-                    materialsList.innerHTML = "<p>⚠️ कोई स्टडी मटेरियल उपलब्ध नहीं है।</p>";
-                }
-            });
-        }
-
-        fetchMaterials();
-
-        async function fetchGitHubMaterials() {
-            const githubRepo = "https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials";
-            const githubList = document.getElementById("github-materials");
-
-            try {
-                const response = await fetch(githubRepo);
-                if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-
-                const folders = await response.json();
-                githubList.innerHTML = "";
-
-                if (Array.isArray(folders)) {
-                    folders.forEach(folder => {
-                        if (folder.type === "dir") {
-                            const li = document.createElement("li");
-                            li.innerHTML = `<a href="#" onclick="loadCategory('${folder.name}')">${folder.name}</a>`;
-                            githubList.appendChild(li);
-                        }
-                    });
-                } else {
-                    githubList.innerHTML = "<p>⚠️ कोई स्टडी मटेरियल उपलब्ध नहीं है।</p>";
-                }
-            } catch (error) {
-                console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
-            }
-        }
-
-        fetchGitHubMaterials();
-
-        window.loadCategory = async function (category) {
-            const categoryRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}`;
-            const githubList = document.getElementById("github-materials");
-
-            try {
-                const response = await fetch(categoryRepo);
-                if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-
-                const subFolders = await response.json();
-                githubList.innerHTML = `<h3>${category}</h3>`;
-
-                if (Array.isArray(subFolders)) {
-                    subFolders.forEach(subFolder => {
-                        if (subFolder.type === "dir") {
-                            const li = document.createElement("li");
-                            li.innerHTML = `<a href="#" onclick="loadFiles('${category}', '${subFolder.name}')">${subFolder.name}</a>`;
-                            githubList.appendChild(li);
-                        }
-                    });
-                } else {
-                    githubList.innerHTML += "<p>⚠️ इस कैटेगरी में कुछ नहीं मिला।</p>";
-                }
-            } catch (error) {
-                console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
-            }
-        };
-
-        window.loadFiles = async function (category, subCategory) {
-            const filesRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}/${subCategory}`;
-            const githubList = document.getElementById("github-materials");
-
-            try {
-                const response = await fetch(filesRepo);
-                if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-
-                const files = await response.json();
-                githubList.innerHTML = `<h3>${subCategory} (📂 ${category})</h3>`;
-
-                if (Array.isArray(files)) {
-                    files.forEach(file => {
-                        if (file.type === "file") {
-                            const li = document.createElement("li");
-                            li.innerHTML = `<a href="${file.download_url}" target="_blank">📄 ${file.name}</a>`;
-                            githubList.appendChild(li);
-                        }
-                    });
-                } else {
-                    githubList.innerHTML += "<p>⚠️ इस फोल्डर में कुछ नहीं मिला।</p>";
-                }
-            } catch (error) {
-                console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
-            }
-        };
-
-        // 🔙 Back Button Function
+    <script>
+        // ✅ 1. Back Button Fix
         function goBack() {
-            window.history.back();
-        }
-
-        // ❌ Page Refresh पर Issue Fix करने के लिए (Prevent Auto-Back)
-        if (performance.navigation.type === 1) {
-            sessionStorage.setItem("reloadPage", "true");
-        }
-
-        window.onload = function () {
-            if (sessionStorage.getItem("reloadPage") === "true") {
-                sessionStorage.removeItem("reloadPage");
+            if (history.length > 1) {
+                history.back();
+            } else {
+                window.location.href = "index.html"; // Default Page अगर Back Possible नहीं है।
             }
-        };
+        }
+
+        // ✅ 2. Refresh पर Auto-Back Issue Fix
+        document.addEventListener("DOMContentLoaded", function () {
+            if (sessionStorage.getItem("pageLoaded")) {
+                history.pushState(null, null, window.location.href);
+                window.onpopstate = function () {
+                    history.go(1); // 🔄 Back जाने से रोकता है
+                };
+            }
+            sessionStorage.setItem("pageLoaded", "true");
+        });
     </script>
 
 </body>
