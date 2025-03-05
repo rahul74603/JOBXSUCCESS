@@ -19,10 +19,10 @@
 
     <div id="materials-container">
         <h2>📂 Firebase से स्टडी मटेरियल</h2>
-        <ul id="firebase-materials"></ul>
+        <ul id="firebase-materials">⏳ लोड हो रहा है...</ul>
 
         <h2>📂 GitHub से स्टडी मटेरियल</h2>
-        <ul id="github-materials"></ul>
+        <ul id="github-materials">⏳ लोड हो रहा है...</ul>
     </div>
 
     <!-- 🔥 Firebase SDK + Config -->
@@ -30,10 +30,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-        // ✅ Firebase Config को fetch() से लोड करें
         async function loadFirebaseConfig() {
             try {
-                const response = await fetch("./firebase-config.json"); // ✅ JSON Config फाइल
+                const response = await fetch("./firebase-config.json");
                 const firebaseConfig = await response.json();
                 return firebaseConfig;
             } catch (error) {
@@ -42,10 +41,9 @@
             }
         }
 
-        // ✅ Firebase से Study Materials लोड करना
         async function fetchMaterials() {
             const firebaseConfig = await loadFirebaseConfig();
-            if (!firebaseConfig) return; // अगर Config लोड नहीं हुआ, तो आगे मत बढ़ो।
+            if (!firebaseConfig) return;
 
             const app = initializeApp(firebaseConfig);
             const db = getDatabase(app);
@@ -65,10 +63,8 @@
                         const title = material.title || "N/A";
                         const downloadLink = material.link || "#";
 
-                        li.innerHTML = `
-                            <h3>🔹 ${title}</h3>
-                            <a href="${downloadLink}" target="_blank" class="download-btn">📥 Download Now</a>
-                        `;
+                        li.innerHTML = `<h3>🔹 ${title}</h3>
+                                        <a href="${downloadLink}" target="_blank" class="download-btn">📥 Download Now</a>`;
                         materialsList.appendChild(li);
                     });
                 } else {
@@ -79,9 +75,8 @@
 
         fetchMaterials();
 
-        // ✅ GitHub से Study Materials लोड करना
         async function fetchGitHubMaterials() {
-            const githubRepo = "https://api.github.com/repos/JOBXSUCCESS/study-materials/contents";
+            const githubRepo = "https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials";
             const githubList = document.getElementById("github-materials");
 
             try {
@@ -95,9 +90,7 @@
                     folders.forEach(folder => {
                         if (folder.type === "dir") {
                             const li = document.createElement("li");
-                            li.innerHTML = `
-                                <a href="#" onclick="loadCategory('${folder.name}')">${folder.name}</a>
-                            `;
+                            li.innerHTML = `<a href="#" onclick="loadCategory('${folder.name}')">${folder.name}</a>`;
                             githubList.appendChild(li);
                         }
                     });
@@ -111,9 +104,8 @@
 
         fetchGitHubMaterials();
 
-        // ✅ जब कोई कैटेगरी खुले, तो अंदर के फोल्डर लोड करें
         window.loadCategory = async function (category) {
-            const categoryRepo = `https://api.github.com/repos/JOBXSUCCESS/study-materials/contents/${category}`;
+            const categoryRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}`;
             const githubList = document.getElementById("github-materials");
 
             try {
@@ -127,9 +119,7 @@
                     subFolders.forEach(subFolder => {
                         if (subFolder.type === "dir") {
                             const li = document.createElement("li");
-                            li.innerHTML = `
-                                <a href="#" onclick="loadFiles('${category}', '${subFolder.name}')">${subFolder.name}</a>
-                            `;
+                            li.innerHTML = `<a href="#" onclick="loadFiles('${category}', '${subFolder.name}')">${subFolder.name}</a>`;
                             githubList.appendChild(li);
                         }
                     });
@@ -141,9 +131,8 @@
             }
         };
 
-        // ✅ जब कोई फोल्डर खुले, तो फाइलें लोड करें
         window.loadFiles = async function (category, subCategory) {
-            const filesRepo = `https://api.github.com/repos/JOBXSUCCESS/study-materials/contents/${category}/${subCategory}`;
+            const filesRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}/${subCategory}`;
             const githubList = document.getElementById("github-materials");
 
             try {
@@ -157,9 +146,7 @@
                     files.forEach(file => {
                         if (file.type === "file") {
                             const li = document.createElement("li");
-                            li.innerHTML = `
-                                <a href="${file.download_url}" target="_blank">📄 ${file.name}</a>
-                            `;
+                            li.innerHTML = `<a href="${file.download_url}" target="_blank">📄 ${file.name}</a>`;
                             githubList.appendChild(li);
                         }
                     });
