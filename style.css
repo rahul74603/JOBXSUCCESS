@@ -74,3 +74,7 @@
    .download-btn:hover {
        background: #1557b0;
    }
+/* study.html के style.css में यह CSS जोड़ें */
+.hidden-section {
+    display: none !important;
+}
