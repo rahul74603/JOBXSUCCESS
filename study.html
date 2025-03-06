@@ -1,82 +1,171 @@
-<!DOCTYPE html>  
-<html lang="hi">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>📚 Study Materials - JOBXSUCCESS</title>  
-    <link rel="stylesheet" href="style.css">  
-</head>  
-<body>  
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Study Materials - JOBXSUCCESS</title>
+    <link rel="stylesheet" href="style.css"> <!-- ✅ External CSS -->
+</head>
+<body>
 
-<!-- 🔹 Navigation Bar -->  
-<div class="navbar">  
-    <a href="index.html">🏠 Home</a>  
-    <a href="jobs.html">📌 Government Jobs</a>  
-    <a href="study.html" class="active">📚 Study Materials</a>  
-</div>  
+<!-- 🔹 Navigation Bar -->
+<div class="navbar">
+    <a href="index.html">🏠 Home</a>
+    <a href="jobs.html">📌 Government Jobs</a>
+    <a href="study.html" class="active">📚 Study Materials</a>
+</div>
 
-<h1>📚 फ्री स्टडी मटेरियल्स</h1>  
+<h1>📚 फ्री स्टडी मटेरियल्स</h1>
 
-<!-- 🔙 Back Button -->  
-<button onclick="goBack()" class="back-btn">⬅️ Back</button>  
+<!-- 🔙 Back Button -->
+<button onclick="goBack()" class="back-btn">⬅️ Back</button>
 
-<!-- ✅ GitHub स्टडी मटेरियल के फोल्डर -->  
-<ul id="folders-list">  
-    <li><a href="#" onclick="loadCategory('')">📂 Study Materials</a></li>  
-</ul>  
+<div id="materials-container">
+    <h2>📂 Firebase से स्टडी मटेरियल</h2>
+    <ul id="firebase-materials">⏳ लोड हो रहा है...</ul>
 
-<!-- ✅ फोल्डर के अंदर की चीज़ें यहाँ लोड होंगी -->  
-<div id="files-container">  
-    <h2 id="category-title">📂 Selected Category</h2>  
-    <ul id="files-list">⚠️ कोई कैटेगरी सेलेक्ट नहीं की गई है।</ul>  
-</div>  
+    <h2>📂 GitHub से स्टडी मटेरियल</h2>
+    <ul id="github-materials">⏳ लोड हो रहा है...</ul>
+</div>
 
-<script>  
-    function goBack() {  
-        window.history.back();  
-    }  
+<!-- 🔥 Firebase SDK + Config -->
+<script src="firebase-config.js"></script>
+<script>
+    firebase.initializeApp(firebaseConfig);
+</script>
 
-    async function loadCategory(path) {  
-        const githubRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${path}`;  
-        const filesList = document.getElementById("files-list");  
-        const categoryTitle = document.getElementById("category-title");  
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-        filesList.innerHTML = "⏳ लोड हो रहा है...";  
-        categoryTitle.innerText = `📂 ${path || "Study Materials"}`;  
+    async function fetchMaterials() {
+        const db = getDatabase(firebase.app());
+        const materialsList = document.getElementById("firebase-materials");
+        const materialsRef = ref(db, "StudyMaterials");
 
-        try {  
-            const response = await fetch(githubRepo);  
-            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);  
+        onValue(materialsRef, (snapshot) => {
+            materialsList.innerHTML = "";
+            const data = snapshot.val();
 
-            const items = await response.json();  
-            filesList.innerHTML = "";  
+            if (data) {
+                Object.keys(data).forEach((key) => {
+                    const material = data[key];
+                    const li = document.createElement("li");
 
-            if (Array.isArray(items)) {  
-                items.forEach(item => {  
-                    const li = document.createElement("li");  
+                    const title = material.title || "N/A";
+                    const downloadLink = material.link || "#";
 
-                    if (item.type === "dir") {  
-                        // ✅ अगर यह फोल्डर है, तो इसे क्लिक करने पर अंदर के डेटा को लोड करेगा  
-                        li.innerHTML = `<a href="#" onclick="loadCategory('${path + item.name}/')">📂 ${item.name} ▸</a>`;  
-                    } else {  
-                        // ✅ अगर यह फ़ाइल है, तो इसे डाउनलोड करने का ऑप्शन देगा  
-                        li.innerHTML = `<a href="${item.download_url}" target="_blank">📄 ${item.name}</a>`;  
-                    }  
+                    li.innerHTML = `<h3>🔹 ${title}</h3>  
+                                    <a href="${downloadLink}" target="_blank" class="download-btn">📥 Download Now</a>`;
+                    materialsList.appendChild(li);
+                });
+            } else {
+                materialsList.innerHTML = "<p>⚠️ कोई स्टडी मटेरियल उपलब्ध नहीं है।</p>";
+            }
+        });
+    }
 
-                    filesList.appendChild(li);  
-                });  
-            } else {  
-                filesList.innerHTML = "<p>⚠️ इस फोल्डर में कुछ नहीं मिला।</p>";  
-            }  
-        } catch (error) {  
-            console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);  
-            filesList.innerHTML = "<p>❌ डेटा लोड करने में समस्या हुई।</p>";  
-        }  
-    }  
+    fetchMaterials();
 
-    // ✅ जब पेज खुले तो मेन "Study Materials" फोल्डर लोड हो जाए  
-    loadCategory("");  
-</script>  
+    async function fetchGitHubMaterials() {
+        const githubRepo = "https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials";
+        const githubList = document.getElementById("github-materials");
 
-</body>  
+        try {
+            const response = await fetch(githubRepo);
+            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+
+            const folders = await response.json();
+            githubList.innerHTML = "";
+
+            if (Array.isArray(folders)) {
+                folders.forEach(folder => {
+                    if (folder.type === "dir") {
+                        const li = document.createElement("li");
+                        li.innerHTML = `<a href="#" onclick="loadCategory('${folder.name}')">${folder.name} ▸</a>`;
+                        githubList.appendChild(li);
+                    }
+                });
+            } else {
+                githubList.innerHTML = "<p>⚠️ कोई स्टडी मटेरियल उपलब्ध नहीं है।</p>";
+            }
+        } catch (error) {
+            console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
+        }
+    }
+
+    fetchGitHubMaterials();
+
+    window.loadCategory = async function (category) {
+        const categoryRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}`;
+        const githubList = document.getElementById("github-materials");
+
+        try {
+            const response = await fetch(categoryRepo);
+            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+
+            const subFolders = await response.json();
+            githubList.innerHTML = `<h3>${category}</h3>`;
+
+            if (Array.isArray(subFolders)) {
+                subFolders.forEach(subFolder => {
+                    if (subFolder.type === "dir") {
+                        const li = document.createElement("li");
+                        li.innerHTML = `<a href="#" onclick="loadFiles('${category}', '${subFolder.name}')">${subFolder.name} ▸</a>`;
+                        githubList.appendChild(li);
+                    }
+                });
+            } else {
+                githubList.innerHTML += "<p>⚠️ इस कैटेगरी में कुछ नहीं मिला।</p>";
+            }
+        } catch (error) {
+            console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
+        }
+    };
+
+    window.loadFiles = async function (category, subCategory) {
+        const filesRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}/${subCategory}`;
+        const githubList = document.getElementById("github-materials");
+
+        try {
+            const response = await fetch(filesRepo);
+            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
+
+            const files = await response.json();
+            githubList.innerHTML = `<h3>${subCategory} (📂 ${category})</h3>`;
+
+            if (Array.isArray(files)) {
+                files.forEach(file => {
+                    if (file.type === "file") {
+                        const li = document.createElement("li");
+                        li.innerHTML = `<a href="${file.download_url}" target="_blank">📄 ${file.name}</a>`;
+                        githubList.appendChild(li);
+                    }
+                });
+            } else {
+                githubList.innerHTML += "<p>⚠️ इस फोल्डर में कुछ नहीं मिला।</p>";
+            }
+        } catch (error) {
+            console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);
+        }
+    };
+
+    // 🔙 Back Button Function
+    function goBack() {
+        window.history.back();
+    }
+
+    // ❌ Page Refresh पर Issue Fix करने के लिए (Prevent Auto-Back)
+    if (performance.navigation.type === 1) {
+        sessionStorage.setItem("reloadPage", "true");
+    }
+
+    window.onload = function () {
+        if (sessionStorage.getItem("reloadPage") === "true") {
+            sessionStorage.removeItem("reloadPage");
+        }
+    };
+</script>
+
+</body>
 </html>
