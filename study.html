@@ -3,100 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 सभी अध्याय - Study Materials</title>
+    <title>Study Materials</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            padding: 10px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
         }
         ul {
             list-style-type: none;
-            padding: 0;
         }
         li {
-            margin: 10px 0;
+            margin: 5px 0;
         }
         a {
             text-decoration: none;
             color: blue;
-            font-weight: bold;
         }
-        a:hover {
-            color: red;
+        .folder {
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .subfolder {
+            margin-left: 20px;
+            display: none;
         }
     </style>
+    <script>
+        function toggleFolder(id) {
+            var folder = document.getElementById(id);
+            if (folder.style.display === "none") {
+                folder.style.display = "block";
+            } else {
+                folder.style.display = "none";
+            }
+        }
+    </script>
 </head>
 <body>
 
-    <h1>📚 सभी अध्याय (Study Materials)</h1>
-
-    <ul>
-        <li><a href="study-materials/Current-affairs/index.html">Current Affairs</a></li>
-        <li><a href="study-materials/english/index.html">English</a></li>
-        
-        <li>
-            <strong>General Knowledge</strong>
-            <ul>
-                <li><a href="study-materials/general-knowledge/Ch-01-History/index.html">History</a>
-                    <ul>
-                        <li><a href="study-materials/general-knowledge/Ch-01-History/Ch-01-prachin-bharat/index.html">प्राचीन भारत</a></li>
-                        <li><a href="study-materials/general-knowledge/Ch-01-History/Ch-02-Madhya-kaleen-bharat/index.html">मध्यकालीन भारत</a></li>
-                        <li><a href="study-materials/general-knowledge/Ch-01-History/Ch-03-Adhunik-bharat/index.html">आधुनिक भारत</a></li>
-                    </ul>
-                </li>
-                <li><a href="study-materials/general-knowledge/Ch-02-Geography/index.html">Geography</a>
-                    <ul>
-                        <li><a href="study-materials/general-knowledge/Ch-02-Geography/Ch-01-Indian-geography/index.html">Indian Geography</a></li>
-                        <li><a href="study-materials/general-knowledge/Ch-02-Geography/Ch-02-World-Geography/index.html">World Geography</a></li>
-                        <li><a href="study-materials/general-knowledge/Ch-02-Geography/Ch-03-Environment-and-ecology/index.html">Environment & Ecology</a></li>
-                    </ul>
-                </li>
-                <li><a href="study-materials/general-knowledge/Ch-03-Polity/index.html">Polity</a></li>
-                <li><a href="study-materials/general-knowledge/Ch-04-Economy/index.html">Economy</a></li>
-                <li><a href="study-materials/general-knowledge/Ch-05-Books-Writers/index.html">Books & Writers</a></li>
-                <li><a href="study-materials/general-knowledge/Ch-06-Nritya-And-Kala/index.html">Nritya & Kala</a></li>
-                <li><a href="study-materials/general-knowledge/Ch-07-Important-Days/index.html">Important Days</a></li>
-            </ul>
-        </li>
-
-        <li>
-            <strong>Mathematics</strong>
-            <ul>
-                <li><a href="study-materials/mathematics/Ch-01-Time-and-Work/index.html">Time & Work</a></li>
-                <li><a href="study-materials/mathematics/Ch-02-Time-speed-and-distance/index.html">Time, Speed & Distance</a></li>
-                <li><a href="study-materials/mathematics/Ch-03-Train-and-Problems/index.html">Train & Problems</a></li>
-                <li><a href="study-materials/mathematics/Ch-04-Naav-and-dhara/index.html">Boat & Stream</a></li>
-                <li><a href="study-materials/mathematics/Ch-05-Simple-and-compound-interest/index.html">Simple & Compound Interest</a></li>
-                <li><a href="study-materials/mathematics/Ch-06-Profit-And-Loss/index.html">Profit & Loss</a></li>
-                <li><a href="study-materials/mathematics/Ch-07-Percentages/index.html">Percentages</a></li>
-                <li><a href="study-materials/mathematics/Ch-08-Anupat-and-samanupat/index.html">Ratio & Proportion</a></li>
-                <li><a href="study-materials/mathematics/Ch-09-mishran-and-mishran-niyam/index.html">Mixtures & Alligations</a></li>
-                <li><a href="study-materials/mathematics/Ch-10-partnership/index.html">Partnership</a></li>
-                <li><a href="study-materials/mathematics/Ch-11-LCM-AND-HCF/index.html">LCM & HCF</a></li>
-                <li><a href="study-materials/mathematics/Ch-12-Probability/index.html">Probability</a></li>
-            </ul>
-        </li>
-
-        <li>
-            <strong>Reasoning</strong>
-            <ul>
-                <li><a href="study-materials/reasoning/Ch-01-Samanta-or-sambandh/index.html">Analogy & Relation</a></li>
-                <li><a href="study-materials/reasoning/Ch-02-Vargikaran-ya-visam-ch/index.html">Classification</a></li>
-                <li><a href="study-materials/reasoning/Ch-03-series/index.html">Series</a></li>
-                <li><a href="study-materials/reasoning/Ch-04-coding-decoding/index.html">Coding-Decoding</a></li>
-                <li><a href="study-materials/reasoning/Ch-05-Blood-relationship/index.html">Blood Relation</a></li>
-                <li><a href="study-materials/reasoning/Ch-06-direction-and-distance/index.html">Direction & Distance</a></li>
-            </ul>
-        </li>
-
-        <li><a href="study-materials/science/index.html">Science</a></li>
+<h2>📚 Study Materials</h2>
+<ul>
+    <li class="folder" onclick="toggleFolder('current-affairs')">📁 Current Affairs</li>
+    <ul id="current-affairs" class="subfolder">
+        <li><a href="study-materials/Current-affairs/Ch-01-Rashtriya-ghatanaye/index.html">Ch-01 Rashtriya Ghatnaye</a></li>
+        <li><a href="study-materials/Current-affairs/Ch-02-Antar-rashtriya-Ghatanaye/index.html">Ch-02 Antar-rashtriya Ghatnaye</a></li>
+        <li><a href="study-materials/Current-affairs/Ch-03-Khel-kood/index.html">Ch-03 Khel-kood</a></li>
+        <li><a href="study-materials/Current-affairs/Ch-04-Purushkar-and-Samman/index.html">Ch-04 Purushkar and Samman</a></li>
     </ul>
+
+    <li class="folder" onclick="toggleFolder('english')">📁 English</li>
+    <ul id="english" class="subfolder">
+        <li><a href="study-materials/english/Ch-01-Idioms-and-phrases/index.html">Ch-01 Idioms and Phrases</a></li>
+        <li><a href="study-materials/english/Ch-02-synonyms-and-antonyms/index.html">Ch-02 Synonyms and Antonyms</a></li>
+        <li><a href="study-materials/english/Ch-03-One-word-substitution/index.html">Ch-03 One-word Substitution</a></li>
+        <li><a href="study-materials/english/Ch-04-Sentence-currection/index.html">Ch-04 Sentence Correction</a></li>
+        <li><a href="study-materials/english/Ch-05-Cloze-test/index.html">Ch-05 Cloze Test</a></li>
+    </ul>
+
+    <li class="folder" onclick="toggleFolder('general-knowledge')">📁 General Knowledge</li>
+    <ul id="general-knowledge" class="subfolder">
+        <li class="folder" onclick="toggleFolder('history')">📁 History</li>
+        <ul id="history" class="subfolder">
+            <li><a href="study-materials/general-knowledge/Ch-01-History/Ch-01-Prachin-bharat/index.html">Ch-01 Prachin Bharat</a></li>
+            <li><a href="study-materials/general-knowledge/Ch-01-History/Ch-02-Madhya-kaleen-bharat/index.html">Ch-02 Madhya-kaleen Bharat</a></li>
+            <li><a href="study-materials/general-knowledge/Ch-01-History/Ch-03-Adhunik-bharat/index.html">Ch-03 Adhunik Bharat</a></li>
+            <li><a href="study-materials/general-knowledge/Ch-01-History/Ch-04-World-history/index.html">Ch-04 World History</a></li>
+        </ul>
+
+        <li class="folder" onclick="toggleFolder('geography')">📁 Geography</li>
+        <ul id="geography" class="subfolder">
+            <li><a href="study-materials/general-knowledge/Ch-02-Geography/Ch-01-Indian-geography/index.html">Ch-01 Indian Geography</a></li>
+            <li><a href="study-materials/general-knowledge/Ch-02-Geography/Ch-02-World-Geography/index.html">Ch-02 World Geography</a></li>
+            <li><a href="study-materials/general-knowledge/Ch-02-Geography/Ch-03-Environment-and-ecology/index.html">Ch-03 Environment and Ecology</a></li>
+        </ul>
+
+        <li class="folder" onclick="toggleFolder('polity')">📁 Polity</li>
+        <ul id="polity" class="subfolder">
+            <li><a href="study-materials/general-knowledge/Ch-03-Polity/Ch-01-Bhartiya-samvidhan/index.html">Ch-01 Bhartiya Samvidhan</a></li>
+            <li><a href="study-materials/general-knowledge/Ch-03-Polity/Ch-02-Kendra-and-rajya-sarkar/index.html">Ch-02 Kendra and Rajya Sarkar</a></li>
+            <li><a href="study-materials/general-knowledge/Ch-03-Polity/Ch-03-Anuchhed-and-Adhiniyam/index.html">Ch-03 Anuchhed and Adhiniyam</a></li>
+        </ul>
+    </ul>
+
+    <li class="folder" onclick="toggleFolder('mathematics')">📁 Mathematics</li>
+    <ul id="mathematics" class="subfolder">
+        <li><a href="study-materials/mathematics/Ch-01-Time-and-Work/index.html">Ch-01 Time and Work</a></li>
+        <li><a href="study-materials/mathematics/Ch-02-Time-speed-and-distance/index.html">Ch-02 Time Speed and Distance</a></li>
+    </ul>
+
+    <li class="folder" onclick="toggleFolder('science')">📁 Science</li>
+    <ul id="science" class="subfolder">
+        <li><a href="study-materials/science/Ch-01-Physics/index.html">Ch-01 Physics</a></li>
+        <li><a href="study-materials/science/Ch-02-Chemistry/index.html">Ch-02 Chemistry</a></li>
+        <li><a href="study-materials/science/Ch-03-Biology/index.html">Ch-03 Biology</a></li>
+    </ul>
+</ul>
 
 </body>
 </html>
