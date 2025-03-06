@@ -20,20 +20,55 @@
 <!-- 🔙 Back Button -->  
 <button onclick="goBack()" class="back-btn">⬅️ Back</button>  
 
-<!-- ✅ GitHub स्टडी मटेरियल के फोल्डर (स्टैटिक रूप में) -->  
-<ul>  
-    <li><a href="#">Current-affairs</a></li>  
-    <li><a href="#">English</a></li>  
-    <li><a href="#">General Knowledge</a></li>  
-    <li><a href="#">Mathematics</a></li>  
-    <li><a href="#">Reasoning</a></li>  
-    <li><a href="#">Science</a></li>  
+<!-- ✅ GitHub स्टडी मटेरियल के फोल्डर -->  
+<ul id="folders-list">  
+    <li><a href="#" onclick="loadCategory('Current-affairs')">Current Affairs</a></li>  
+    <li><a href="#" onclick="loadCategory('English')">English</a></li>  
+    <li><a href="#" onclick="loadCategory('General Knowledge')">General Knowledge</a></li>  
+    <li><a href="#" onclick="loadCategory('Mathematics')">Mathematics</a></li>  
+    <li><a href="#" onclick="loadCategory('Reasoning')">Reasoning</a></li>  
+    <li><a href="#" onclick="loadCategory('Science')">Science</a></li>  
 </ul>  
+
+<!-- ✅ फोल्डर के अंदर की फ़ाइलें यहाँ लोड होंगी -->  
+<div id="files-container">  
+    <h2>📂 Selected Category</h2>  
+    <ul id="files-list">⚠️ कोई कैटेगरी सेलेक्ट नहीं की गई है।</ul>  
+</div>  
 
 <!-- 🔙 Back Button Function -->  
 <script>  
     function goBack() {  
         window.history.back();  
+    }  
+
+    async function loadCategory(category) {  
+        const githubRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}`;  
+        const filesList = document.getElementById("files-list");  
+        filesList.innerHTML = "⏳ लोड हो रहा है...";  
+
+        try {  
+            const response = await fetch(githubRepo);  
+            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);  
+
+            const files = await response.json();  
+            filesList.innerHTML = "";  
+
+            if (Array.isArray(files)) {  
+                files.forEach(file => {  
+                    if (file.type === "file") {  
+                        const li = document.createElement("li");  
+                        li.innerHTML = `<a href="${file.download_url}" target="_blank">📄 ${file.name}</a>`;  
+                        filesList.appendChild(li);  
+                    }  
+                });  
+            } else {  
+                filesList.innerHTML = "<p>⚠️ इस फोल्डर में कुछ नहीं मिला।</p>";  
+            }  
+        } catch (error) {  
+            console.error("❌ GitHub से डेटा लोड करने में दिक्कत:", error);  
+            filesList.innerHTML = "<p>❌ डेटा लोड करने में समस्या हुई।</p>";  
+        }  
     }  
 </script>  
 
