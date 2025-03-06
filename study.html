@@ -22,12 +22,7 @@
 
 <!-- ✅ GitHub स्टडी मटेरियल के फोल्डर -->  
 <ul id="folders-list">  
-    <li><a href="#" onclick="loadCategory('Current-affairs', '')">Current Affairs</a></li>  
-    <li><a href="#" onclick="loadCategory('English', '')">English</a></li>  
-    <li><a href="#" onclick="loadCategory('General Knowledge', '')">General Knowledge</a></li>  
-    <li><a href="#" onclick="loadCategory('Mathematics', '')">Mathematics</a></li>  
-    <li><a href="#" onclick="loadCategory('Reasoning', '')">Reasoning</a></li>  
-    <li><a href="#" onclick="loadCategory('Science', '')">Science</a></li>  
+    <li><a href="#" onclick="loadCategory('')">📂 Study Materials</a></li>  
 </ul>  
 
 <!-- ✅ फोल्डर के अंदर की चीज़ें यहाँ लोड होंगी -->  
@@ -41,13 +36,13 @@
         window.history.back();  
     }  
 
-    async function loadCategory(category, path = "") {  
-        const githubRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}/${path}`;  
+    async function loadCategory(path) {  
+        const githubRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${path}`;  
         const filesList = document.getElementById("files-list");  
         const categoryTitle = document.getElementById("category-title");  
 
         filesList.innerHTML = "⏳ लोड हो रहा है...";  
-        categoryTitle.innerText = `📂 ${category} / ${path}`;  
+        categoryTitle.innerText = `📂 ${path || "Study Materials"}`;  
 
         try {  
             const response = await fetch(githubRepo);  
@@ -62,7 +57,7 @@
 
                     if (item.type === "dir") {  
                         // ✅ अगर यह फोल्डर है, तो इसे क्लिक करने पर अंदर के डेटा को लोड करेगा  
-                        li.innerHTML = `<a href="#" onclick="loadCategory('${category}', '${path + item.name}/')">📂 ${item.name} ▸</a>`;  
+                        li.innerHTML = `<a href="#" onclick="loadCategory('${path + item.name}/')">📂 ${item.name} ▸</a>`;  
                     } else {  
                         // ✅ अगर यह फ़ाइल है, तो इसे डाउनलोड करने का ऑप्शन देगा  
                         li.innerHTML = `<a href="${item.download_url}" target="_blank">📄 ${item.name}</a>`;  
@@ -78,6 +73,9 @@
             filesList.innerHTML = "<p>❌ डेटा लोड करने में समस्या हुई।</p>";  
         }  
     }  
+
+    // ✅ जब पेज खुले तो मेन "Study Materials" फोल्डर लोड हो जाए  
+    loadCategory("");  
 </script>  
 
 </body>  
