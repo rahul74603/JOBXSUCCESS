@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    // Firebase SDK लोड करना
+    // ✅ Firebase SDK लोड करना
     if (typeof firebase === "undefined") {
         const firebaseScript = document.createElement("script");
         firebaseScript.src = "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const deadlineText = job.lastDate ? `📅 अंतिम तिथि: ${job.lastDate}` : "";
 
                     const jobElement = document.createElement("li");
-                    jobElement.classList.add("job-item"); // ✅ New Class Added
+                    jobElement.classList.add("job-item");
                     jobElement.innerHTML = `
                         <div class="job-card">
                             <h3>${job.title}</h3>
@@ -61,24 +61,30 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    // ✅ GitHub से स्टडी मैटेरियल लोड करना
-    async function fetchStudyMaterials() {
+    // ✅ GitHub से स्टडी मैटेरियल लोड करना (अब सभी सब-फ़ोल्डर भी दिखेंगे)
+    async function fetchStudyMaterials(path = "study-materials", parentElement = null) {
         try {
-            const url = "https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials";
+            const url = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/${path}`;
             const response = await fetch(url);
 
             if (!response.ok) throw new Error(`❌ HTTP Error! Status: ${response.status}`);
 
             const data = await response.json();
-            const materialsList = document.getElementById("materials-list");
-
-            materialsList.innerHTML = ""; // पुरानी लिस्ट क्लियर करें
+            let materialsList = parentElement || document.getElementById("materials-list");
 
             data.forEach(item => {
                 const li = document.createElement("li");
-                li.classList.add("study-item"); // ✅ New Class Added
-                li.innerHTML = `<h3>📁 ${item.name}</h3>
-                                <a href="${item.html_url}" target="_blank" class="download-btn">🔗 Open</a>`;
+                li.classList.add("study-item");
+
+                if (item.type === "dir") {
+                    li.innerHTML = `<h3>📂 ${item.name}</h3>`;
+                    const sublist = document.createElement("ul");
+                    li.appendChild(sublist);
+                    fetchStudyMaterials(item.path, sublist);
+                } else {
+                    li.innerHTML = `<h3>📄 ${item.name}</h3>
+                                    <a href="${item.html_url}" target="_blank" class="download-btn">🔗 Open</a>`;
+                }
                 materialsList.appendChild(li);
             });
 
