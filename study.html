@@ -30,20 +30,58 @@
         a:hover {
             color: red;
         }
+        .sub-folder {
+            margin-left: 20px;
+        }
     </style>
 </head>
 <body>
 
     <h1>📚 Study Materials</h1>
+    <ul id="folderList"></ul>
 
-    <ul>
-        <li><a href="study-materials/Current-Affairs/index.html">📰 Current Affairs</a></li>
-        <li><a href="study-materials/English/index.html">📖 English</a></li>
-        <li><a href="study-materials/General-Knowledge/index.html">🌍 General Knowledge</a></li>
-        <li><a href="study-materials/Mathematics/index.html">🧮 Mathematics</a></li>
-        <li><a href="study-materials/Reasoning/index.html">🧠 Reasoning</a></li>
-        <li><a href="study-materials/Science/index.html">🔬 Science</a></li>
-    </ul>
+    <script>
+        // 📌 सभी मुख्य टॉपिक्स और उनके अंदर के फोल्डर्स को ऑटो-लिंक करने वाला कोड
+        const studyMaterials = {
+            "Current Affairs": [
+                "National Events", "International Events", "Sports", "Awards"
+            ],
+            "English": [
+                "Grammar", "Vocabulary", "Comprehension"
+            ],
+            "General Knowledge": [
+                "History", "Geography", "Polity", "Economy"
+            ],
+            "Mathematics": [
+                "Algebra", "Geometry", "Trigonometry"
+            ],
+            "Reasoning": [
+                "Logical Reasoning", "Verbal Reasoning", "Non-Verbal Reasoning"
+            ],
+            "Science": [
+                "Physics", "Chemistry", "Biology"
+            ]
+        };
+
+        const folderList = document.getElementById("folderList");
+
+        for (let mainFolder in studyMaterials) {
+            let li = document.createElement("li");
+            li.innerHTML = `<a href="study-materials/${mainFolder.replace(/ /g, "-")}/index.html">📂 ${mainFolder}</a>`;
+            
+            let subUl = document.createElement("ul");
+            subUl.classList.add("sub-folder");
+
+            studyMaterials[mainFolder].forEach(subFolder => {
+                let subLi = document.createElement("li");
+                subLi.innerHTML = `<a href="study-materials/${mainFolder.replace(/ /g, "-")}/${subFolder.replace(/ /g, "-")}/index.html">📁 ${subFolder}</a>`;
+                subUl.appendChild(subLi);
+            });
+
+            li.appendChild(subUl);
+            folderList.appendChild(li);
+        }
+    </script>
 
 </body>
 </html>
