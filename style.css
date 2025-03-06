@@ -74,3 +74,6 @@
    .download-btn:hover {
        background: #1557b0;
    }
+.hidden-section {
+       display: none !important;
+}
