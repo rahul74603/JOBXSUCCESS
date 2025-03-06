@@ -130,3 +130,6 @@ footer {
 h2 {
     display: none;
 }
+#loading-text {
+    display: none;
+}
