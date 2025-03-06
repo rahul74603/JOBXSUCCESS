@@ -4,7 +4,7 @@
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <title>📚 Study Materials - JOBXSUCCESS</title>  
-    <link rel="stylesheet" href="style.css"> <!-- ✅ External CSS -->  
+    <link rel="stylesheet" href="style.css">  
 </head>  
 <body>  
 
@@ -30,20 +30,19 @@
     <li><a href="#" onclick="loadCategory('Science')">Science</a></li>  
 </ul>  
 
-<!-- ✅ फोल्डर के अंदर की फ़ाइलें यहाँ लोड होंगी -->  
+<!-- ✅ फोल्डर के अंदर की चीज़ें यहाँ लोड होंगी -->  
 <div id="files-container">  
     <h2>📂 Selected Category</h2>  
     <ul id="files-list">⚠️ कोई कैटेगरी सेलेक्ट नहीं की गई है।</ul>  
 </div>  
 
-<!-- 🔙 Back Button Function -->  
 <script>  
     function goBack() {  
         window.history.back();  
     }  
 
-    async function loadCategory(category) {  
-        const githubRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}`;  
+    async function loadCategory(category, path = "") {  
+        const githubRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}/${path}`;  
         const filesList = document.getElementById("files-list");  
         filesList.innerHTML = "⏳ लोड हो रहा है...";  
 
@@ -51,16 +50,22 @@
             const response = await fetch(githubRepo);  
             if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);  
 
-            const files = await response.json();  
+            const items = await response.json();  
             filesList.innerHTML = "";  
 
-            if (Array.isArray(files)) {  
-                files.forEach(file => {  
-                    if (file.type === "file") {  
-                        const li = document.createElement("li");  
-                        li.innerHTML = `<a href="${file.download_url}" target="_blank">📄 ${file.name}</a>`;  
-                        filesList.appendChild(li);  
+            if (Array.isArray(items)) {  
+                items.forEach(item => {  
+                    const li = document.createElement("li");  
+
+                    if (item.type === "dir") {  
+                        // ✅ अगर यह फोल्डर है, तो इसे क्लिक करने पर अंदर के डेटा को लोड करेगा  
+                        li.innerHTML = `<a href="#" onclick="loadCategory('${category}', '${path + item.name}/')">📂 ${item.name}</a>`;  
+                    } else {  
+                        // ✅ अगर यह फ़ाइल है, तो इसे डाउनलोड करने का ऑप्शन देगा  
+                        li.innerHTML = `<a href="${item.download_url}" target="_blank">📄 ${item.name}</a>`;  
                     }  
+
+                    filesList.appendChild(li);  
                 });  
             } else {  
                 filesList.innerHTML = "<p>⚠️ इस फोल्डर में कुछ नहीं मिला।</p>";  
