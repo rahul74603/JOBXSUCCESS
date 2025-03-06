@@ -17,15 +17,15 @@
 
 <h1>📚 फ्री स्टडी मटेरियल्स</h1>  
 
-<!-- 🔙 Back Button -->  
+<!-- 🔙 Back Button (फिक्स किया) -->  
 <button onclick="goBack()" class="back-btn">⬅️ Back</button>  
 
 <div id="materials-container">  
     <h2>📂 Firebase से स्टडी मटेरियल</h2>  
-    <ul id="firebase-materials"></ul> <!-- "लोड हो रहा है..." हटाया गया -->  
+    <ul id="firebase-materials"></ul> <!-- "लोड हो रहा है..." हटाया -->  
 
     <h2>📂 GitHub से स्टडी मटेरियल</h2>  
-    <ul id="github-materials"></ul> <!-- "लोड हो रहा है..." हटाया गया -->  
+    <ul id="github-materials"></ul> <!-- "लोड हो रहा है..." हटाया -->  
 </div>  
 
 <!-- 🔥 Firebase SDK + Config -->  
@@ -40,6 +40,7 @@
 
     async function fetchMaterials() {  
         const db = getDatabase(firebase.app());  
+
         const materialsList = document.getElementById("firebase-materials");  
         const materialsRef = ref(db, "StudyMaterials");  
 
@@ -66,6 +67,11 @@
     }  
 
     fetchMaterials();  
+
+    // ✅ Back Button Fix  
+    function goBack() {  
+        window.history.back();  
+    }  
 </script>
 
 </body>  
