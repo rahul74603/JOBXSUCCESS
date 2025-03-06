@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    // ✅ GitHub से स्टडी मैटेरियल लोड करना (अब सभी सब-फ़ोल्डर भी दिखेंगे)
+    // ✅ GitHub से स्टडी मैटेरियल लोड करना
     async function fetchStudyMaterials(path = "study-materials", parentElement = null) {
         try {
             const url = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/${path}`;
@@ -94,5 +94,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     fetchStudyMaterials();
+
+    // ✅ Back Button Fix
+    window.goBack = function () {
+        window.history.back();
+    };
 });
-document.getElementById("loading-text").style.display = "none";
