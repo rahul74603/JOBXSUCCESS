@@ -95,4 +95,3 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     fetchStudyMaterials();
 });
-document.getElementById("loading-text").style.display = "none";
