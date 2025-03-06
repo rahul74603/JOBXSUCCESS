@@ -26,49 +26,63 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-        import firebaseConfig from "./firebase-config.js"; // ✅ Firebase Config Import
+        import getFirebaseConfig from "./firebase-config.js"; // ✅ Firebase Config Import
 
-        // ✅ Firebase Initialize
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // ✅ Firebase से सरकारी नौकरी की लिस्ट लोड करना
-        function fetchJobs() {
-            const jobsList = document.getElementById("jobs-list");
-            const jobsRef = ref(db, "Jobs");
-
-            onValue(jobsRef, (snapshot) => {
-                jobsList.innerHTML = ""; // 🔹 पहले की लिस्ट क्लियर करें
-                const data = snapshot.val();
-
-                if (data) {
-                    Object.keys(data).forEach((key) => {
-                        const job = data[key];
-                        const li = document.createElement("li");
-
-                        // ✅ अगर कोई डेटा मिसिंग है तो "N/A" दिखाएं
-                        const title = job.title || "N/A";
-                        const company = job.company || "Unknown";
-                        const location = job.location || "India";
-                        const applyLink = job.applyLink || "#";
-                        const lastDate = job.lastDate ? `📅 Last Date: ${job.lastDate}` : "📅 No Deadline";
-
-                        li.classList.add("job"); // ✅ CSS Class Add की
-                        li.innerHTML = `
-                            <strong>${title}</strong> - <em>${company}</em> <br>
-                            🌍 Location: ${location} <br>
-                            ${lastDate} <br>
-                            <a href="${applyLink}" target="_blank" class="apply-btn">🔗 Apply Now</a>
-                        `;
-                        jobsList.appendChild(li);
-                    });
-                } else {
-                    jobsList.innerHTML = "<p>⚠️ कोई सरकारी नौकरी उपलब्ध नहीं है।</p>";
+        async function initFirebase() {
+            try {
+                const firebaseConfig = await getFirebaseConfig(); // 🔹 Config Load करें
+                if (!firebaseConfig) {
+                    console.error("⚠️ Firebase Config लोड नहीं हो पाया!");
+                    return;
                 }
-            });
+
+                // ✅ Firebase Initialize
+                const app = initializeApp(firebaseConfig);
+                const db = getDatabase(app);
+
+                // ✅ Firebase से सरकारी नौकरी की लिस्ट लोड करना
+                function fetchJobs() {
+                    const jobsList = document.getElementById("jobs-list");
+                    const jobsRef = ref(db, "Jobs");
+
+                    onValue(jobsRef, (snapshot) => {
+                        jobsList.innerHTML = ""; // 🔹 पहले की लिस्ट क्लियर करें
+                        const data = snapshot.val();
+
+                        if (data) {
+                            Object.keys(data).forEach((key) => {
+                                const job = data[key];
+                                const li = document.createElement("li");
+
+                                // ✅ अगर कोई डेटा मिसिंग है तो "N/A" दिखाएं
+                                const title = job.title || "N/A";
+                                const company = job.company || "Unknown";
+                                const location = job.location || "India";
+                                const applyLink = job.applyLink || "#";
+                                const lastDate = job.lastDate ? `📅 Last Date: ${job.lastDate}` : "📅 No Deadline";
+
+                                li.classList.add("job"); // ✅ CSS Class Add की
+                                li.innerHTML = `
+                                    <strong>${title}</strong> - <em>${company}</em> <br>
+                                    🌍 Location: ${location} <br>
+                                    ${lastDate} <br>
+                                    <a href="${applyLink}" target="_blank" class="apply-btn">🔗 Apply Now</a>
+                                `;
+                                jobsList.appendChild(li);
+                            });
+                        } else {
+                            jobsList.innerHTML = "<p>⚠️ कोई सरकारी नौकरी उपलब्ध नहीं है।</p>";
+                        }
+                    });
+                }
+
+                fetchJobs(); // ✅ फंक्शन को कॉल करना मत भूलना!
+            } catch (error) {
+                console.error("🔥 Firebase Initialize करने में दिक्कत आई:", error);
+            }
         }
 
-        fetchJobs(); // ✅ फंक्शन को कॉल करना मत भूलना!
+        initFirebase();
     </script>
 
 </body>
