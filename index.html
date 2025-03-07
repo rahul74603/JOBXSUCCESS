@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JobXSuccess - सरकारी नौकरी और स्टडी मटेरियल</title>
+    
+    <!-- ✅ Manifest.json को लिंक किया -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- ✅ PWA के लिए Meta Tags -->
+    <meta name="theme-color" content="#ff4757">
+    <meta name="description" content="JobXSuccess - सरकारी नौकरी की जानकारी और स्टडी मटेरियल">
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,13 +55,6 @@
             font-size: 14px;
             color: gray;
         }
-        <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then((reg) => console.log('Service Worker Registered!', reg))
-      .catch((err) => console.log('Service Worker Registration Failed!', err));
-  }
-</script>
     </style>
 </head>
 <body>
@@ -62,7 +62,6 @@
 <header>🚀 JobXSuccess - सरकारी नौकरी और स्टडी मटेरियल</header>
 
 <div class="container">
-    
     <div class="section">
         <h2>📌 <a href="jobs.html">सरकारी नौकरी अपडेट</a></h2>
     </div>
@@ -70,12 +69,20 @@
     <div class="section">
         <h2>📚 <a href="study.html">स्टडी मटेरियल कैटेगरी</a></h2>
     </div>
-
 </div>
 
 <div class="footer">
     © 2025 JobXSuccess | सभी अधिकार सुरक्षित
 </div>
+
+<!-- ✅ Service Worker को रजिस्टर करने का स्क्रिप्ट -->
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then((reg) => console.log('✅ Service Worker Registered!', reg))
+      .catch((err) => console.log('❌ Service Worker Registration Failed!', err));
+  }
+</script>
 
 </body>
 </html>
