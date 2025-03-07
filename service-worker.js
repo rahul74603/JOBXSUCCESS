@@ -1,19 +1,19 @@
-const CACHE_NAME = "jobxsuccess-cache-v1";
+const CACHE_NAME = "jobxsuccess-cache-v2";
 const urlsToCache = [
-  "/JOBXSUCCESS/",
-  "/JOBXSUCCESS/index.html",
-  "/JOBXSUCCESS/manifest.json",
-  "/JOBXSUCCESS/icons/icon-192x192.png",
-  "/JOBXSUCCESS/icons/icon-512x512.png"
+  "./", 
+  "./index.html",
+  "./manifest.json",
+  "./icons/icon-192x192.png",
+  "./icons/icon-512x512.png"
 ];
 
-// Install Service Worker
+// Install Service Worker and Cache Files
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache).catch((error) => {
-        console.error("Cache addAll failed:", error);
-      });
+      return cache.addAll(urlsToCache);
+    }).catch((error) => {
+      console.error("Cache addAll failed:", error);
     })
   );
 });
@@ -22,15 +22,16 @@ self.addEventListener("install", (event) => {
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      if (response) {
-        return response;
-      }
-      return fetch(event.request).catch(() => {
-        console.error("Fetch failed for", event.request.url);
-        return new Response("Offline: Unable to fetch the resource.", {
-          status: 503,
-          statusText: "Service Unavailable"
+      return response || fetch(event.request).then((fetchResponse) => {
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, fetchResponse.clone());
+          return fetchResponse;
         });
+      });
+    }).catch(() => {
+      return new Response("You are offline. Please check your internet connection.", {
+        status: 503,
+        statusText: "Service Unavailable"
       });
     })
   );
@@ -43,7 +44,6 @@ self.addEventListener("activate", (event) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log("Deleting old cache:", cache);
             return caches.delete(cache);
           }
         })
