@@ -7,119 +7,58 @@
 
 /* Body Styles */
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: #e8f5e9; /* Light green background */
-    color: #2e7d32; /* Dark green text */
-    padding: 20px;
-    line-height: 1.6;
-}
-
-/* Navigation Bar */
-.navbar {
-    background: #4caf50; /* Green navbar */
-    padding: 1rem;
+    font-family: Arial, sans-serif;
+    background-color: #e8f5e9; /* Light green background */
     text-align: center;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #2e7d32; /* Dark green text */
 }
 
-.navbar a {
+/* Header */
+header {
+    background-color: #4caf50; /* Green header */
+    padding: 15px;
     color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 1.1rem;
-    transition: color 0.3s ease;
-}
-
-.navbar a:hover {
-    color: #ffeb3b; /* Yellow on hover */
-}
-
-.navbar a.active {
+    font-size: 22px;
     font-weight: bold;
-    text-decoration: underline;
 }
 
-/* Back Button */
-.back-btn {
-    background: #4caf50; /* Green button */
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
+/* Container */
+.container {
+    padding: 20px;
+}
+
+/* Sections */
+.section {
+    background-color: white;
+    padding: 15px;
+    margin: 15px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #2e7d32; /* Dark green links */
+    display: block;
+    padding: 10px;
     border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
     transition: background-color 0.3s ease;
 }
 
-.back-btn:hover {
-    background: #388e3c; /* Darker green on hover */
+a:hover {
+    background-color: #c8e6c9; /* Light green on hover */
 }
 
-/* study-materials Grid */
-.study-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
+/* Footer */
+.footer {
     margin-top: 20px;
-}
-
-.study-card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.study-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.study-card h2 {
-    color: #4caf50; /* Green heading */
-    margin-bottom: 15px;
-    font-size: 1.5rem;
-}
-
-.study-card ul {
-    list-style: none;
-    padding: 0;
-}
-
-.study-card ul li {
-    margin: 10px 0;
-}
-
-.study-card ul li a {
-    color: #2e7d32; /* Dark green links */
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    transition: color 0.3s ease;
-}
-
-.study-card ul li a:hover {
-    color: #4caf50; /* Green on hover */
-}
-
-/* Icons */
-.study-card ul li a::before {
-    content: "📄";
-    margin-right: 10px;
-    font-size: 1.2rem;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .navbar a {
-        display: block;
-        margin: 10px 0;
-    }
-
-    .study-grid {
-        grid-template-columns: 1fr;
-    }
+    font-size: 14px;
+    color: #4caf50; /* Green footer text */
 }
