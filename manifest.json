@@ -1,18 +1,19 @@
 {
-  "name": "JOBXSUCCESS",
-  "short_name": "JOBXSUCCESS",
-  "start_url": "/index.html",
+  "name": "JobXSuccess",
+  "short_name": "JobXSuccess",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#007bff",
+  "theme_color": "#ff4757",
+  "description": "JobXSuccess - सरकारी नौकरी और स्टडी मटेरियल",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
