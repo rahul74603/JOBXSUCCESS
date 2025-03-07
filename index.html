@@ -75,6 +75,22 @@
     © 2025 JobXSuccess | सभी अधिकार सुरक्षित
 </div>
 
+<!-- ✅ Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"></script>
+
+<!-- ✅ Firebase Config (अलग फाइल में हो तो इम्पोर्ट कर लिया) -->
+<script src="firebase-config.js"></script>
+
+<script>
+    // ✅ Firebase Initialization (firebase-config.js से डाटा लेगा)
+    firebase.initializeApp(firebaseConfig);
+
+    console.log("✅ Firebase Initialized Successfully!");
+</script>
+
 <!-- ✅ Service Worker को रजिस्टर करने का स्क्रिप्ट -->
 <script>
   if ('serviceWorker' in navigator) {
