@@ -11,6 +11,7 @@ body {
     background: #f5f7fa;
     color: #2c3e50;
     padding: 20px;
+    line-height: 1.6;
 }
 
 /* Navigation Bar */
@@ -28,6 +29,11 @@ body {
     text-decoration: none;
     margin: 0 15px;
     font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #ffdd57;
 }
 
 .navbar a.active {
@@ -44,6 +50,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
     margin-bottom: 20px;
+    transition: background-color 0.3s ease;
 }
 
 .back-btn:hover {
@@ -63,20 +70,23 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .study-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .study-card h2 {
     color: #1a73e8;
     margin-bottom: 15px;
+    font-size: 1.5rem;
 }
 
 .study-card ul {
     list-style: none;
+    padding: 0;
 }
 
 .study-card ul li {
@@ -88,6 +98,7 @@ body {
     text-decoration: none;
     display: flex;
     align-items: center;
+    transition: color 0.3s ease;
 }
 
 .study-card ul li a:hover {
@@ -98,4 +109,17 @@ body {
 .study-card ul li a::before {
     content: "📄";
     margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar a {
+        display: block;
+        margin: 10px 0;
+    }
+
+    .study-grid {
+        grid-template-columns: 1fr;
+    }
 }
