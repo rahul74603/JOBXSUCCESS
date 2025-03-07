@@ -8,15 +8,15 @@
 /* Body Styles */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #f5f7fa;
-    color: #2c3e50;
+    background: #e8f5e9; /* Light green background */
+    color: #2e7d32; /* Dark green text */
     padding: 20px;
     line-height: 1.6;
 }
 
 /* Navigation Bar */
 .navbar {
-    background: #1a73e8;
+    background: #4caf50; /* Green navbar */
     padding: 1rem;
     text-align: center;
     margin-bottom: 20px;
@@ -33,7 +33,7 @@ body {
 }
 
 .navbar a:hover {
-    color: #ffdd57;
+    color: #ffeb3b; /* Yellow on hover */
 }
 
 .navbar a.active {
@@ -43,7 +43,7 @@ body {
 
 /* Back Button */
 .back-btn {
-    background: #1a73e8;
+    background: #4caf50; /* Green button */
     color: white;
     padding: 0.5rem 1rem;
     border: none;
@@ -54,10 +54,10 @@ body {
 }
 
 .back-btn:hover {
-    background: #1557b0;
+    background: #388e3c; /* Darker green on hover */
 }
 
-/* Study Materials Grid */
+/* study-materials Grid */
 .study-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -79,7 +79,7 @@ body {
 }
 
 .study-card h2 {
-    color: #1a73e8;
+    color: #4caf50; /* Green heading */
     margin-bottom: 15px;
     font-size: 1.5rem;
 }
@@ -94,7 +94,7 @@ body {
 }
 
 .study-card ul li a {
-    color: #2c3e50;
+    color: #2e7d32; /* Dark green links */
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -102,7 +102,7 @@ body {
 }
 
 .study-card ul li a:hover {
-    color: #1a73e8;
+    color: #4caf50; /* Green on hover */
 }
 
 /* Icons */
