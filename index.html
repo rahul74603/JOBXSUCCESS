@@ -6,10 +6,13 @@
     <title>JobXSuccess - सरकारी नौकरी और स्टडी मटेरियल</title>
 
     <!-- ✅ Manifest.json (PWA) -->
-    <link rel="manifest" href="manifest.jsonamedn">
+    <link rel="manifest" href="manifest.json">
 
     <!-- ✅ Stylesheet -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- ✅ Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- ✅ Meta Tags for PWA -->
     <meta name="theme-color" content="#007bff">
@@ -18,20 +21,32 @@
 </head>
 <body>
 
-    <header>🚀 JobXSuccess - सरकारी नौकरी और स्टडी मटेरियल</header>
+    <header>
+        <h1>🚀 JobXSuccess - सरकारी नौकरी और स्टडी मटेरियल</h1>
+        <nav>
+            <ul>
+                <li><a href="jobs.html">सरकारी नौकरी अपडेट</a></li>
+                <li><a href="study.html">स्टडी मटेरियल</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <div class="container">
-        <div class="section">
-            <h2>📌 <a href="jobs.html">सरकारी नौकरी अपडेट</a></h2>
+    <main>
+        <div class="container">
+            <div class="section">
+                <h2>📌 <a href="jobs.html">सरकारी नौकरी अपडेट</a></h2>
+                <p>सरकारी नौकरी की ताजा जानकारी और अपडेट्स प्राप्त करें।</p>
+            </div>
+            <div class="section">
+                <h2>📚 <a href="study.html">स्टडी मटेरियल कैटेगरी</a></h2>
+                <p>सरकारी नौकरी परीक्षाओं के लिए उपयोगी स्टडी मटेरियल डाउनलोड करें।</p>
+            </div>
         </div>
-        <div class="section">
-            <h2>📚 <a href="study.html">स्टडी मटेरियल कैटेगरी</a></h2>
-        </div>
-    </div>
+    </main>
 
-    <div class="footer">
+    <footer>
         © 2025 JobXSuccess | सभी अधिकार सुरक्षित
-    </div>
+    </footer>
 
     <!-- ✅ Firebase Config Import -->
     <script type="module">
