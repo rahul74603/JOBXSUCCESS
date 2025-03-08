@@ -3,148 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 study-materials - JOBXSUCCESS</title>
-    <link rel="stylesheet" href="style.css">
+    <title>स्टडी मटेरियल - JobXSuccess</title>
+
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        h1 { color: #333; }
-        .container { display: flex; flex-wrap: wrap; justify-content: center; }
-        .box { 
-            width: 200px; 
-            margin: 10px; 
-            padding: 15px; 
-            border: 1px solid #ddd; 
-            border-radius: 5px; 
-            background-color: #f9f9f9; 
-            transition: transform 0.2s; 
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            text-align: center;
+            margin: 0;
+            padding: 0;
         }
-        .box:hover { transform: translateY(-5px); }
-        .box a { 
-            text-decoration: none; 
-            font-size: 18px; 
-            color: #007BFF; 
-            display: block; 
+        header {
+            background-color: #ff4757;
+            padding: 15px;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
         }
-        .error { color: red; font-weight: bold; }
-        .loading { color: orange; }
+        .container {
+            padding: 20px;
+        }
+        .section {
+            background-color: white;
+            padding: 15px;
+            margin: 15px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #ddd;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: gray;
+        }
     </style>
 </head>
 <body>
 
-<!-- 🔹 Navigation Bar -->
-<div class="navbar">
-    <a href="index.html">🏠 Home</a>
-    <a href="jobs.html">📌 Government Jobs</a>
-    <a href="study.html" class="active">📚 study-materials</a>
+<header>📚 स्टडी मटेरियल - JobXSuccess</header>
+
+<div class="container">
+    <div class="section">
+        <h2>📰 <a href="study-materials/current-affairs/">Current Affairs</a></h2>
+    </div>
+    <div class="section">
+        <h2>📖 <a href="study-materials/english/">English</a></h2>
+    </div>
+    <div class="section">
+        <h2>🌍 <a href="study-materials/general-knowledge/">General Knowledge</a></h2>
+    </div>
+    <div class="section">
+        <h2>🧮 <a href="study-materials/mathematics/">Mathematics</a></h2>
+    </div>
+    <div class="section">
+        <h2>🧠 <a href="study-materials/reasoning/">Reasoning</a></h2>
+    </div>
+    <div class="section">
+        <h2>🔬 <a href="study-materials/science/">Science</a></h2>
+    </div>
 </div>
 
-<h1>📚 फ्री स्टडी मटेरियल्स</h1>
-
-<!-- 🔥 Study Materials (GitHub से) -->
-<div class="container" id="github-materials"></div>
-
-<script>
-    // 🔹 लोडिंग स्टेट
-    const githubList = document.getElementById("github-materials");
-    githubList.innerHTML = "<p class='loading'>⏳ डेटा लोड हो रहा है...</p>";
-
-    async function fetchGitHubMaterials() {
-        const githubRepo = "https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials";
-        
-        try {
-            const response = await fetch(githubRepo);
-            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-
-            const folders = await response.json();
-            githubList.innerHTML = ""; // 🔹 Clear previous content
-
-            if (folders.length === 0) {
-                githubList.innerHTML = "<p class='error'>⚠️ कोई स्टडी मटेरियल उपलब्ध नहीं है।</p>";
-                return;
-            }
-
-            folders.forEach(folder => {
-                if (folder.type === "dir") {
-                    const div = document.createElement("div");
-                    div.className = "box";
-                    div.innerHTML = `<a href="#" onclick="loadCategory('${folder.name}')">📂 ${folder.name}</a>`;
-                    githubList.appendChild(div);
-                }
-            });
-
-        } catch (error) {
-            githubList.innerHTML = `<p class='error'>❌ त्रुटि: ${error.message}</p>`;
-            console.error("GitHub से डेटा लोड करने में दिक्कत:", error);
-        }
-    }
-
-    // 🔹 कैटेगरी लोड करना
-    window.loadCategory = async function (category) {
-        githubList.innerHTML = "<p class='loading'>⏳ लोड हो रहा है...</p>";
-        const categoryRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}`;
-
-        try {
-            const response = await fetch(categoryRepo);
-            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-
-            const subFolders = await response.json();
-            githubList.innerHTML = `<h2>📂 ${category}</h2>`;
-
-            if (subFolders.length === 0) {
-                githubList.innerHTML += "<p class='error'>⚠️ इस कैटेगरी में कुछ नहीं मिला।</p>";
-                return;
-            }
-
-            subFolders.forEach(subFolder => {
-                if (subFolder.type === "dir") {
-                    const div = document.createElement("div");
-                    div.className = "box";
-                    div.innerHTML = `<a href="#" onclick="loadFiles('${category}', '${subFolder.name}')">📁 ${subFolder.name}</a>`;
-                    githubList.appendChild(div);
-                }
-            });
-
-        } catch (error) {
-            githubList.innerHTML = `<p class='error'>❌ त्रुटि: ${error.message}</p>`;
-            console.error("GitHub से डेटा लोड करने में दिक्कत:", error);
-        }
-    };
-
-    // 🔹 फाइल्स लोड करना
-    window.loadFiles = async function (category, subCategory) {
-        githubList.innerHTML = "<p class='loading'>⏳ लोड हो रहा है...</p>";
-        const filesRepo = `https://api.github.com/repos/rahul74603/JOBXSUCCESS/contents/study-materials/${category}/${subCategory}`;
-
-        try {
-            const response = await fetch(filesRepo);
-            if (!response.ok) throw new Error(`GitHub API Error: ${response.status}`);
-
-            const files = await response.json();
-            githubList.innerHTML = `<h2>📁 ${subCategory} (📂 ${category})</h2>`;
-
-            if (files.length === 0) {
-                githubList.innerHTML += "<p class='error'>⚠️ इस फोल्डर में कुछ नहीं मिला।</p>";
-                return;
-            }
-
-            files.forEach(file => {
-                if (file.type === "file") {
-                    const div = document.createElement("div");
-                    div.className = "box";
-                    div.innerHTML = `<a href="${file.download_url}" target="_blank">📄 ${file.name}</a>`;
-                    githubList.appendChild(div);
-                }
-            });
-
-        } catch (error) {
-            githubList.innerHTML = `<p class='error'>❌ त्रुटि: ${error.message}</p>`;
-            console.error("GitHub से डेटा लोड करने में दिक्कत:", error);
-        }
-    };
-
-    // 🔹 पहली बार लोड करें
-    fetchGitHubMaterials();
-</script>
+<div class="footer">
+    © 2025 JobXSuccess | सभी अधिकार सुरक्षित
+</div>
 
 </body>
 </html>
