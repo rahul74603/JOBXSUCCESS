@@ -1,9 +1,11 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif; /* Modern font */
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #f9f9f9; /* Lighter background */
+    color: #333; /* Darker text for better readability */
+    line-height: 1.6;
 }
 
 /* Header */
@@ -11,40 +13,52 @@ header {
     background-color: #007bff;
     color: white;
     text-align: center;
-    padding: 15px 0;
+    padding: 20px 0; /* Increased padding */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 header h1 {
     margin: 0;
+    font-size: 2.5rem; /* Larger font size */
+    font-weight: 700; /* Bold font */
 }
 
 nav ul {
     list-style: none;
     padding: 0;
+    margin: 10px 0 0; /* Adjusted margin */
 }
 
 nav ul li {
     display: inline;
-    margin: 0 15px;
+    margin: 0 20px; /* Increased spacing */
 }
 
 nav ul li a {
     color: white;
     text-decoration: none;
     font-weight: bold;
+    font-size: 1.1rem; /* Slightly larger font */
+    transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+nav ul li a:hover {
+    color: #ffdd57; /* Highlight color on hover */
 }
 
 /* Main Content */
 main {
-    padding: 20px;
+    padding: 30px 20px; /* Increased padding */
     text-align: center;
 }
 
 #jobs-container {
     background: white;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px; /* Increased padding */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Deeper shadow */
+    max-width: 800px; /* Limit width for better readability */
+    margin: 0 auto; /* Center the container */
 }
 
 /* Footer */
@@ -52,6 +66,40 @@ footer {
     background-color: #007bff;
     color: white;
     text-align: center;
-    padding: 10px 0;
-    margin-top: 20px;
+    padding: 15px 0; /* Increased padding */
+    margin-top: 30px; /* More space above footer */
+    font-size: 0.9rem; /* Smaller font size */
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Shadow at the top */
+}
+
+/* Additional Styles for Buttons (if needed) */
+.button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem; /* Smaller font size for mobile */
+    }
+
+    nav ul li {
+        display: block; /* Stack nav items vertically */
+        margin: 10px 0;
+    }
+
+    #jobs-container {
+        padding: 15px; /* Reduced padding for mobile */
+    }
 }
