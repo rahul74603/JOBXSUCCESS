@@ -3,57 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Material - JobXSuccess</title>
-    <link rel="stylesheet" href="style.css">
+    <title>📚 स्टडी मटेरियल - JobXSuccess</title>
+
+    <!-- ✅ Manifest.json (PWA) -->
     <link rel="manifest" href="manifest.json">
+
+    <!-- ✅ Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- ✅ Meta Tags for PWA -->
+    <meta name="theme-color" content="#007bff">
+    <meta name="description" content="JobXSuccess - फ्री स्टडी मटेरियल सरकारी नौकरी की तैयारी के लिए">
+
 </head>
 <body>
 
-<header>📚 Study Materials - JobXSuccess</header>
+    <header>📚 स्टडी मटेरियल</header>
 
-<div class="container">
-    <div class="section">
-        <h2>📖 General Knowledge</h2>
-        <a href="general-knowledge/index.html">Open</a>
+    <div class="container">
+        <h2>📖 विषय सूची</h2>
+        <ul id="study-list"></ul> <!-- ✅ यहाँ सब-फोल्डर दिखेंगे -->
     </div>
 
-    <div class="section">
-        <h2>🧮 Mathematics</h2>
-        <a href="mathematics/index.html">Open</a>
+    <div class="footer">
+        <a href="index.html">🏠 होम</a> | 
+        <a href="jobs.html">⚡ जॉब अपडेट्स</a>
+        <br>© 2025 JobXSuccess | सभी अधिकार सुरक्षित
     </div>
 
-    <div class="section">
-        <h2>🔬 Science</h2>
-        <a href="science/index.html">Open</a>
-    </div>
+    <!-- ✅ Firebase Config Import -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+        import firebaseConfig from "./firebase-config.js";
+        initializeApp(firebaseConfig);
+    </script>
 
-    <div class="section">
-        <h2>🧠 Reasoning</h2>
-        <a href="reasoning/index.html">Open</a>
-    </div>
+    <!-- ✅ स्टडी मटेरियल लिस्टिंग (Sub-Folders Auto-Show) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const subjects = [
+                { name: "📕 Current Affairs", path: "study-materials/current-affairs/index.html" },
+                { name: "📘 English", path: "study-materials/english/index.html" },
+                { name: "📗 General Knowledge", path: "study-materials/general-knowledge/index.html" },
+                { name: "📙 Mathematics", path: "study-materials/mathematics/index.html" },
+                { name: "📔 Reasoning", path: "study-materials/reasoning/index.html" },
+                { name: "📒 Science", path: "study-materials/science/index.html" }
+            ];
 
-    <div class="section">
-        <h2>📜 Current Affairs</h2>
-        <a href="current-affairs/index.html">Open</a>
-    </div>
+            const studyList = document.getElementById("study-list");
+            studyList.innerHTML = ""; // पहले की लिस्ट हटाएं
 
-    <div class="section">
-        <h2>📌 English</h2>
-        <a href="english/index.html">Open</a>
-    </div>
-</div>
+            subjects.forEach(subject => {
+                let li = document.createElement("li");
+                li.innerHTML = `<a href="${subject.path}">${subject.name}</a>`;
+                studyList.appendChild(li);
+            });
+        });
+    </script>
 
-<div class="footer">
-    © 2025 JobXSuccess | सभी अधिकार सुरक्षित
-</div>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register("service-worker.js")
-      .then((reg) => console.log('✅ Service Worker Registered!', reg))
-      .catch((err) => console.log('❌ Service Worker Registration Failed!', err));
-  }
-</script>
+    <!-- ✅ Service Worker (PWA) -->
+    <script>
+      if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register("service-worker.js")
+          .then((reg) => console.log('✅ Service Worker Registered!', reg))
+          .catch((err) => console.log('❌ Service Worker Registration Failed!', err));
+      }
+    </script>
 
 </body>
 </html>
