@@ -1,10 +1,7 @@
-const firebaseConfig = {
-    apiKey: "AIzaSyDIDyD5MKcx3iQ2zHzpf_JPfUR3hxYlokQ",
-    authDomain: "jobxsuccess.firebaseapp.com",
-    databaseURL: "https://jobxsuccess-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "jobxsuccess",
-    storageBucket: "jobxsuccess.firebasestorage.app",
-    messagingSenderId: "300111417927",
-    appId: "1:300111417927:web:3f5240df7cb12f3941d762"
-};
-export default firebaseConfig;
+fetch("https://script.google.com/macros/s/AKfycbz6VRvr6pJ5aCLHCIeX-Wg4bdsEYRy68sujM1y2sZnxkI3rngrpxr8UNXB7lihW0dN37w/exec")
+  .then(response => response.json())
+  .then(firebaseConfig => {
+    console.log("Firebase Config Loaded Securely:", firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
+  })
+  .catch(error => console.error("Error loading Firebase config:", error));
