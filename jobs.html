@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>सरकारी नौकरियाँ - JobXSuccess</title>
-    <link rel="stylesheet" href="style.css"> <!-- ✅ External CSS -->
+    <link rel="stylesheet" href="style.css"> <!-- CSS फ़ाइल सही होनी चाहिए -->
 </head>
 <body>
 
@@ -24,35 +24,34 @@
 
     <!-- 🔥 Firebase SDK + Config -->
     <script type="module">
+        // 🔹 सही Firestore मॉड्यूल्स इंपोर्ट करें
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-        import firebaseConfig from "./firebase-config.js"; // ✅ Firebase Config Import
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { firebaseConfig } from "./firebase-config.js"; // ✅ Firebase Config
 
         // ✅ Firebase Initialize
         const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        const db = getFirestore(app);
 
-        // ✅ Firebase से सरकारी नौकरी की लिस्ट लोड करना
+        // ✅ Firestore से सरकारी नौकरी की लिस्ट लोड करना
         const jobsList = document.getElementById("jobs-list");
-        const jobsRef = ref(db, "Jobs");
+        const jobsCollection = collection(db, "Jobs"); // 🔹 Firestore का सही सिंटैक्स
 
-        onValue(jobsRef, (snapshot) => {
-            jobsList.innerHTML = ""; // 🔹 पहले की लिस्ट क्लियर करें
-            const data = snapshot.val();
-
-            if (data) {
-                Object.keys(data).forEach((key) => {
-                    const job = data[key];
+        onSnapshot(jobsCollection, (querySnapshot) => { // 🔹 onSnapshot का उपयोग
+            jobsList.innerHTML = "";
+            if (!querySnapshot.empty) {
+                querySnapshot.forEach((doc) => {
+                    const job = doc.data();
                     const li = document.createElement("li");
 
-                    // ✅ अगर कोई डेटा मिसिंग है तो "N/A" दिखाएं
+                    // ✅ मिसिंग डेटा के लिए N/A
                     const title = job.title || "N/A";
-                    const company = job.company || "Unknown";
-                    const location = job.location || "India";
+                    const company = job.company || "N/A";
+                    const location = job.location || "N/A";
                     const applyLink = job.applyLink || "#";
                     const lastDate = job.lastDate ? `📅 Last Date: ${job.lastDate}` : "📅 No Deadline";
 
-                    li.classList.add("job"); // ✅ CSS Class Add की
+                    li.classList.add("job");
                     li.innerHTML = `
                         <strong>${title}</strong> - <em>${company}</em> <br>
                         🌍 Location: ${location} <br>
