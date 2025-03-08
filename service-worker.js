@@ -1,5 +1,3 @@
-// service-worker.js
-
 const CACHE_NAME = "jobxsuccess-cache-v1";
 const urlsToCache = [
     "/",
@@ -26,18 +24,32 @@ self.addEventListener("install", (event) => {
 // 🔹 Fetch Event - ऑफलाइन होने पर कैश से फाइलें लोड करें
 self.addEventListener("fetch", (event) => {
     event.respondWith(
-        fetch(event.request).catch(() => caches.match(event.request))
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request).then((fetchResponse) => {
+                // Cache the fetched response for future use
+                return caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(event.request, fetchResponse.clone());
+                    return fetchResponse;
+                });
+            });
+        }).catch(() => {
+            // If both fetch and cache fail, show the offline page
+            return caches.match("/offline.html");
+        })
     );
 });
 
 // 🔹 Activate Event - पुराने कैश को हटाएं
 self.addEventListener("activate", (event) => {
+    const cacheWhitelist = [CACHE_NAME];
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
-                cacheNames
-                    .filter((cache) => cache !== CACHE_NAME)
-                    .map((cache) => caches.delete(cache))
+                cacheNames.map((cacheName) => {
+                    if (!cacheWhitelist.includes(cacheName)) {
+                        return caches.delete(cacheName);
+                    }
+                })
             );
         })
     );
