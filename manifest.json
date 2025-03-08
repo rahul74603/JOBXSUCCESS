@@ -1,22 +1,21 @@
 {
-  "name": "JOBXSUCCESS",
-  "short_name": "JOBX",
-  "start_url": "/index.html",  // 🔹 सुधार: स्पष्ट URL
-  "display": "standalone",
-  "background_color": "#4caf50",
-  "theme_color": "#4caf50",
-  "description": "A platform for job seekers and learners.",
-  "icons": [
-    {
-      "src": "icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "scope": "/"  // 🔹 जोड़ा गया: PWA का स्कोप
+    "name": "JOBXSUCCESS",
+    "short_name": "JobsSuccess",
+    "description": "Study & Government Jobs Website",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#007bff",
+    "icons": [
+        {
+            "src": "/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
 }
