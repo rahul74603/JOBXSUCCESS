@@ -8,26 +8,42 @@
 /* Body Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #e8f5e9; /* Light green background */
+    background-color: #e8f5e9; /* हल्का हरा पृष्ठभूमि */
     text-align: center;
-    margin: 0;
-    padding: 0;
     line-height: 1.6;
-    color: #2e7d32; /* Dark green text */
+    color: #2e7d32; /* गहरा हरा पाठ */
+    min-height: 100vh; /* 🔹 पूर्ण स्क्रीन कवर करना */
+    transition: background-color 0.3s ease; /* 🔹 थीम चेंज के लिए स्मूथ ट्रांज़िशन */
 }
 
 /* Header */
 header {
-    background-color: #4caf50; /* Green header */
+    background-color: #4caf50; /* गहरा हरा हेडर */
     padding: 15px;
     color: white;
     font-size: 22px;
     font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 🔹 हेडर को उठा हुआ दिखाना */
 }
 
-/* Container */
-.container {
-    padding: 20px;
+/* Navigation Bar */
+.navbar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+    background-color: #43a047; /* 🔹 हेडर से थोड़ा हल्का हरा */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a {
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+}
+
+.navbar a.active {
+    background-color: #1b5e20; /* 🔹 सक्रिय लिंक के लिए गहरा हरा */
 }
 
 /* Sections */
@@ -41,24 +57,58 @@ header {
     max-width: 500px;
 }
 
-/* Links */
-a {
-    text-decoration: none;
-    font-size: 18px;
-    color: #2e7d32; /* Dark green links */
-    display: block;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+/* Job Cards */
+.job-card {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
 }
 
-a:hover {
-    background-color: #c8e6c9; /* Light green on hover */
+.job-card h3 {
+    color: #142757; /* 🔹 Firebase हेडर के मेल का रंग */
+}
+
+.job-card .apply-btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.job-card .apply-btn:hover {
+    background-color: #43a047; /* 🔹 होवर पर रंग बदलाव */
+}
+
+/* Study Materials */
+.study-item {
+    margin: 10px 0;
+}
+
+.study-item a.download-btn {
+    background-color: #81c784; /* 🔹 हल्का हरा डाउनलोड बटन */
+    color: #1b5e20;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-align: center;
 }
 
 /* Footer */
 .footer {
     margin-top: 20px;
     font-size: 14px;
-    color: #4caf50; /* Green footer text */
+    color: #4caf50;
+    padding: 10px;
+    background-color: #e8f5e9; /* 🔹 बॉडी के साथ मेल */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .section {
+        padding: 10px;
+    }
+
+    a {
+        font-size: 16px;
+    }
 }
