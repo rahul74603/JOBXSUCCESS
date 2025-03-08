@@ -1,74 +1,106 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 स्टडी मटेरियल - JobXSuccess</title>
-
-    <!-- ✅ Manifest.json (PWA) -->
-    <link rel="manifest" href="manifest.json">
-
-    <!-- ✅ Stylesheet -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- ✅ Meta Tags for PWA -->
-    <meta name="theme-color" content="#007bff">
-    <meta name="description" content="JobXSuccess - फ्री स्टडी मटेरियल सरकारी नौकरी की तैयारी के लिए">
-
+    <title>Study Materials</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
-    <header>📚 स्टडी मटेरियल</header>
+    <h1>Study Materials</h1>
 
-    <div class="container">
-        <h2>📖 विषय सूची</h2>
-        <ul id="study-list"></ul> <!-- ✅ यहाँ सब-फोल्डर दिखेंगे -->
-    </div>
+    <ul>
+        <li><a href="Current-affairs/index.html">Current Affairs</a></li>
+        <ul>
+            <li><a href="Current-affairs/Ch-01-Rashtiya-ghatnaye/index.html">Ch-01 Rashtiya Ghatnaye</a></li>
+            <li><a href="Current-affairs/Ch-02-Antar-rashtiya-Ghatnaye/index.html">Ch-02 Antar Rashtiya Ghatnaye</a></li>
+            <li><a href="Current-affairs/Ch-03-Khel-kood/index.html">Ch-03 Khel-kood</a></li>
+            <li><a href="Current-affairs/Ch-04-Purushkar-and-Samman/index.html">Ch-04 Purushkar and Samman</a></li>
+        </ul>
 
-    <div class="footer">
-        <a href="index.html">🏠 होम</a> | 
-        <a href="jobs.html">⚡ जॉब अपडेट्स</a>
-        <br>© 2025 JobXSuccess | सभी अधिकार सुरक्षित
-    </div>
+        <li><a href="english/index.html">English</a></li>
+        <ul>
+            <li><a href="english/Ch-01-Idioms-and-phrases/index.html">Ch-01 Idioms and Phrases</a></li>
+            <li><a href="english/Ch-02-synonyms-and-antonyms/index.html">Ch-02 Synonyms and Antonyms</a></li>
+            <li><a href="english/Ch-03-One-word-substitution/index.html">Ch-03 One Word Substitution</a></li>
+        </ul>
 
-    <!-- ✅ Firebase Config Import -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
-        import firebaseConfig from "./firebase-config.js";
-        initializeApp(firebaseConfig);
-    </script>
+        <li><a href="general-knowledge/index.html">General Knowledge</a></li>
+        <ul>
+            <li><a href="general-knowledge/Ch-01-History/index.html">Ch-01 History</a></li>
+            <ul>
+                <li><a href="general-knowledge/Ch-01-History/Ch-01-Prachin-bharat/index.html">Prachin Bharat</a></li>
+                <li><a href="general-knowledge/Ch-01-History/Ch-02-Madhya-kaleen-bharat/index.html">Madhya Kaleen Bharat</a></li>
+                <li><a href="general-knowledge/Ch-01-History/Ch-03-Adhunik-bharat/index.html">Adhunik Bharat</a></li>
+                <li><a href="general-knowledge/Ch-01-History/Ch-04-World-history/index.html">World History</a></li>
+            </ul>
+            <li><a href="general-knowledge/Ch-02-Geography/index.html">Ch-02 Geography</a></li>
+            <ul>
+                <li><a href="general-knowledge/Ch-02-Geography/Ch-01-Indian-geography/index.html">Indian Geography</a></li>
+                <li><a href="general-knowledge/Ch-02-Geography/Ch-02-World-Geography/index.html">World Geography</a></li>
+                <li><a href="general-knowledge/Ch-02-Geography/Ch-03-Environment-and-ecology/index.html">Environment and Ecology</a></li>
+            </ul>
+            <li><a href="general-knowledge/Ch-03-Polity/index.html">Ch-03 Polity</a></li>
+            <ul>
+                <li><a href="general-knowledge/Ch-03-Polity/Ch-01-Bhartiya-samvidhan/index.html">Bhartiya Samvidhan</a></li>
+                <li><a href="general-knowledge/Ch-03-Polity/Ch-02-Kendra-and-rajya-sarkaar/index.html">Kendra and Rajya Sarkaar</a></li>
+                <li><a href="general-knowledge/Ch-03-Polity/Ch-03-Anuchhed-and-Adhiniyam/index.html">Anuchhed and Adhiniyam</a></li>
+            </ul>
+            <li><a href="general-knowledge/Ch-04-Economy/index.html">Ch-04 Economy</a></li>
+            <ul>
+                <li><a href="general-knowledge/Ch-04-Economy/Ch-01-indian-economy/index.html">Indian Economy</a></li>
+                <li><a href="general-knowledge/Ch-04-Economy/Ch-02-Niti-and-yojna/index.html">Niti and Yojna</a></li>
+                <li><a href="general-knowledge/Ch-04-Economy/Ch-03-Banking-and-vittiya-pranali/index.html">Banking and Vittiya Pranali</a></li>
+            </ul>
+        </ul><a href="study-materials/General-Knowledge/Ch-05-Books-Writers/index.html">Books & Writers</a></li>
+        <li><a href="study-materials/General-Knowledge/Ch-06-Nritya-And-kala/index.html">Nritya & Kala</a></li>
+        <li><a href="study-materials/General-Knowledge/Ch-07-Important-Days/index.html">Important Days</a></li>
+    </ul>
 
-    <!-- ✅ स्टडी मटेरियल लिस्टिंग (Sub-Folders Auto-Show) -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const subjects = [
-                { name: "📕 Current Affairs", path: "study-materials/current-affairs/index.html" },
-                { name: "📘 English", path: "study-materials/english/index.html" },
-                { name: "📗 General Knowledge", path: "study-materials/general-knowledge/index.html" },
-                { name: "📙 Mathematics", path: "study-materials/mathematics/index.html" },
-                { name: "📔 Reasoning", path: "study-materials/reasoning/index.html" },
-                { name: "📒 Science", path: "study-materials/science/index.html" }
-            ];
-
-            const studyList = document.getElementById("study-list");
-            studyList.innerHTML = ""; // पहले की लिस्ट हटाएं
-
-            subjects.forEach(subject => {
-                let li = document.createElement("li");
-                li.innerHTML = `<a href="${subject.path}">${subject.name}</a>`;
-                studyList.appendChild(li);
-            });
-        });
-    </script>
-
-    <!-- ✅ Service Worker (PWA) -->
-    <script>
-      if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register("service-worker.js")
-          .then((reg) => console.log('✅ Service Worker Registered!', reg))
-          .catch((err) => console.log('❌ Service Worker Registration Failed!', err));
-      }
-    </script>
+        <li><a href="mathematics/index.html">Mathematics</a></li>
+        <ul>
+            <li><a href="mathematics/Ch-01-Time-and-Work/index.html">Ch-01 Time and Work</a></li>
+            <li><a href="mathematics/Ch-02-Time-speed-and-distance/index.html">Ch-02 Time Speed and Distance</a></li>
+            <li><a href="mathematics/Ch-03-Train-and-Problems/index.html">Ch-03 Train and Problems</a></li>
+            <li><a href="mathematics/Ch-04-Naav-and-dhara/index.html">Ch-04 Naav and Dhara</a></li>
+            </ul><a href="study-materials/Mathematics/Ch-05-Simple-and-compound-intrest/index.html">Simple and Compound Interest</a></li>
+            <li><a href="study-materials/Mathematics/Ch-06-Profit-And-Loss/index.html">Profit and Loss</a></li>            
+            <li><a href="study-materials/Mathematics/Ch-07-Percentages/index.html">Percentages</a></li>
+            <li><a href="study-materials/Mathematics/Ch-08-Anupat-and-samanupat/index.html">अनुपात और समानुपात</a></li>
+            <li><a href="study-materials/Mathematics/Ch-09-mishran-and-mishran-niyam/index.html">मिश्रण और मिश्रण नियम</a></li>
+            <li><a href="study-materials/Mathematics/Ch-10-Partnership/index.html">साझेदारी</a></li>
+            <li><a href="study-materials/Mathematics/Ch-11-LCM-AND-HCF/index.html">LCM & HCF</a></li>
+             <li><a href="study-materials/Mathematics/Ch-12-probability/index.html">Probability</a></li>
+       </ul>
+        <li><a href="reasoning/index.html">Reasoning</a></li>
+        <ul>
+            <li><a href="reasoning/Ch-01-Samanta-or-sambandh/index.html">Ch-01 Samanta or Sambandh</a></li>
+            <li><a href="reasoning/Ch-02-Vargikaran-ya-visam-chayan/index.html">Ch-02 Vargikaran ya Visam Chayan</a></li>
+            <li><a href="reasoning/Ch-03-Series/index.html">Ch-03 Series</a></li>
+            <li><a href="reasoning/Ch-04-Coding-decoding/index.html">Ch-04 Coding Decoding</a></li>
+            </ul><a href="study-materials/Reasoning/Ch-05-Blood-relationship/index.html">Blood Relationship</a></li>
+            <li><a href="study-materials/Reasoning/Ch-06-direction-and-distance/index.html">Direction and Distance</a></li>
+            <li><a href="study-materials/Reasoning/Ch-07-neyan-and-niskarsh/index.html">न्याय और निष्कर्ष</a></li>
+            <li><a href="study-materials/Reasoning/Ch-08-kathan-and-niskarsh/index.html">कथन और निष्कर्ष</a></li>
+            <li><a href="study-materials/Reasoning/Ch-09-bethne-ki-vyavastha/index.html">बैठने की व्यवस्था</a></li>
+            <li><a href="study-materials/Reasoning/Ch-10-puzzle/index.html">Puzzle</a></li>
+            <li><a href="study-materials/Reasoning/Ch-11-Ranking-and-order/index.html">Ranking and Order</a></li>
+            <li><a href="study-materials/Reasoning/Ch-12-clock-and-calander/index.html">Clock and Calendar</a></li>
+            </ul><a href="study-materials/Reasoning/Ch-13-mirror-and-water-image/index.html">Mirror and Water Image</a></li>
+            <li><a href="study-materials/Reasoning/Ch-14-cube-and-pasha/index.html">Cube and Dice</a></li>
+        </ul>
+        <li><a href="science/index.html">Science</a></li>
+        <ul>
+            <li><a href="science/Ch-01-Physics/index.html">Ch-01 Physics</a></li>
+            <li><a href="science/Ch-02-Chemistry/index.html">Ch-02 Chemistry</a></li>
+            <li><a href="science/Ch-03-Biology/index.html">Ch-03 Biology</a></li>
+            <li><a href="science/Ch-04-Computer-Science/index.html">Ch-04 Computer Science</a></li>
+        </ul>
+    </ul>
 
 </body>
 </html>
+
+             
+            
