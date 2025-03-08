@@ -3,62 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Materials - JobXSuccess</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #ff4757;
-            padding: 15px;
-            color: white;
-            font-size: 22px;
-            font-weight: bold;
-        }
-        .container {
-            padding: 20px;
-        }
-        .section {
-            background-color: white;
-            padding: 15px;
-            margin: 15px auto;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 500px;
-        }
-        a {
-            text-decoration: none;
-            font-size: 18px;
-            color: #333;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        a:hover {
-            background-color: #ddd;
-        }
-        .footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: gray;
-        }
-    </style>
+    <title>Study Material - JobXSuccess</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <header>📚 Study Materials - JobXSuccess</header>
-    <div class="container">
-        <div class="section"><h2>📖 <a href="Study Materials/Current Affairs/index.html">Current Affairs</a></h2></div>
-        <div class="section"><h2>📕 <a href="Study Materials/English/index.html">English</a></h2></div>
-        <div class="section"><h2>📗 <a href="Study Materials/General Knowledge/index.html">General Knowledge</a></h2></div>
-        <div class="section"><h2>📘 <a href="Study Materials/Mathematics/index.html">Mathematics</a></h2></div>
-        <div class="section"><h2>📙 <a href="Study Materials/Reasoning/index.html">Reasoning</a></h2></div>
-        <div class="section"><h2>📓 <a href="Study Materials/Science/index.html">Science</a></h2></div>
+
+<header>📚 Study Materials - JobXSuccess</header>
+
+<div class="container">
+    <div class="section">
+        <h2>📖 General Knowledge</h2>
+        <a href="general-knowledge/index.html">Open</a>
     </div>
-    <div class="footer">© 2025 JobXSuccess | सभी अधिकार सुरक्षित</div>
+
+    <div class="section">
+        <h2>🧮 Mathematics</h2>
+        <a href="mathematics/index.html">Open</a>
+    </div>
+
+    <div class="section">
+        <h2>🔬 Science</h2>
+        <a href="science/index.html">Open</a>
+    </div>
+
+    <div class="section">
+        <h2>🧠 Reasoning</h2>
+        <a href="reasoning/index.html">Open</a>
+    </div>
+
+    <div class="section">
+        <h2>📜 Current Affairs</h2>
+        <a href="current-affairs/index.html">Open</a>
+    </div>
+
+    <div class="section">
+        <h2>📌 English</h2>
+        <a href="english/index.html">Open</a>
+    </div>
+</div>
+
+<div class="footer">
+    © 2025 JobXSuccess | सभी अधिकार सुरक्षित
+</div>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+      .then((reg) => console.log('✅ Service Worker Registered!', reg))
+      .catch((err) => console.log('❌ Service Worker Registration Failed!', err));
+  }
+</script>
+
 </body>
 </html>
