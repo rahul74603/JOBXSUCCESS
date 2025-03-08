@@ -10,7 +10,7 @@ async function getFirebaseConfig() {
         return config;
     } catch (error) {
         console.error("🔥 Firebase Config Load करने में दिक्कत आई:", error);
-        return null; // ❌ Error आने पर null Return होगा ताकि App Crash न हो
+        return null; // ❌ Error आने पर null Return होगा
     }
 }
 
