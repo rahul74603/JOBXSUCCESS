@@ -50,9 +50,7 @@
     </style>
 </head>
 <body>
-    <header>
-        JOBXSUCCESS
-    </header>
+    <header>JOBXSUCCESS</header>
     <div class="container">
         <div class="section">
             <a href="jobs.html">Jobs</a>
@@ -61,22 +59,17 @@
             <a href="study.html">Study</a>
         </div>
     </div>
-    <div class="footer">
-        &copy; JOBXSUCCESS | All rights reserved
-    </div>
+    <div class="footer">&copy; JOBXSUCCESS | All rights reserved</div>
 
-    <!-- Firebase SDK और Config फ़ाइल को जोड़ें -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
-    <script src="firebase-config.js"></script> <!-- यह आपकी Firebase Config फ़ाइल है -->
-
-    <!-- Service Worker -->
+    <!-- Firebase SDK + Service Worker -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./service-worker.js') // सही पथ
-                .then((reg) => console.log('Service Worker registered!', reg))
-                .catch((err) => console.log('Service Worker registration failed:', err));
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(() => console.log('Service Worker registered!'))
+                .catch((err) => console.log('Service Worker error:', err));
         }
     </script>
 </body>
