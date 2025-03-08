@@ -19,6 +19,35 @@
             font-size: 2.5rem;
             margin-top: 20px;
         }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #007bff;
+            padding: 10px 20px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-buttons a {
+            text-decoration: none;
+            color: white;
+            background: #28a745;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .nav-buttons a:hover {
+            background: #218838;
+        }
         .container {
             display: flex;
             justify-content: space-between;
@@ -86,7 +115,13 @@
 </head>
 <body>
 
-    <h1>Study Materials</h1>
+    <div class="header">
+        <h1>Study Materials</h1>
+        <div class="nav-buttons">
+            <a href="index.html">Home</a>
+            <a href="jobs.html">Jobs</a>
+        </div>
+    </div>
 
     <div class="container">
         <div class="left-column">
