@@ -3,68 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>सरकारी नौकरियाँ - JobXSuccess</title>
-    <link rel="stylesheet" href="style.css"> <!-- CSS फ़ाइल सही होनी चाहिए -->
-</head>
-<body>
+    <title>सरकारी नौकरी अपडेट - JobXSuccess</title>
 
-    <!-- 🔹 Navigation Bar -->
-    <div class="navbar">
-        <a href="index.html">🏠 Home</a>
-        <a href="jobs.html" class="active">📌 Government Jobs</a>
-        <a href="study.html">📚 Study Materials</a>
-    </div>
+    <!-- ✅ Manifest.json लिंक -->
+    <link rel="manifest" href="manifest.json">
 
-    <h1>📌 सरकारी नौकरियाँ</h1>
+    <!-- ✅ PWA के लिए Meta Tags -->
+    <meta name="theme-color" content="#ff4757">
+    <meta name="description" content="JobXSuccess - सरकारी नौकरी की जानकारी और स्टडी मटेरियल">
+
+    <!-- ✅ Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
     
-    <!-- ✅ जॉब्स लिस्ट -->
-    <div id="jobs-container">
-        <ul id="jobs-list"></ul>
-    </div>
-
-    <!-- 🔥 Firebase SDK + Config -->
+    <!-- ✅ Firebase Config (इसे सिर्फ इम्पोर्ट किया, ओपन नहीं किया) -->
     <script type="module">
-        // 🔹 सही Firestore मॉड्यूल्स इंपोर्ट करें
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-        import { firebaseConfig } from "./firebase-config.js"; // ✅ Firebase Config
+        import { firebaseConfig } from './firebase-config.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // ✅ Firebase Initialize
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const db = getDatabase(app);
 
-        // ✅ Firestore से सरकारी नौकरी की लिस्ट लोड करना
-        const jobsList = document.getElementById("jobs-list");
-        const jobsCollection = collection(db, "Jobs"); // 🔹 Firestore का सही सिंटैक्स
-
-        onSnapshot(jobsCollection, (querySnapshot) => { // 🔹 onSnapshot का उपयोग
-            jobsList.innerHTML = "";
-            if (!querySnapshot.empty) {
-                querySnapshot.forEach((doc) => {
-                    const job = doc.data();
-                    const li = document.createElement("li");
-
-                    // ✅ मिसिंग डेटा के लिए N/A
-                    const title = job.title || "N/A";
-                    const company = job.company || "N/A";
-                    const location = job.location || "N/A";
-                    const applyLink = job.applyLink || "#";
-                    const lastDate = job.lastDate ? `📅 Last Date: ${job.lastDate}` : "📅 No Deadline";
-
-                    li.classList.add("job");
-                    li.innerHTML = `
-                        <strong>${title}</strong> - <em>${company}</em> <br>
-                        🌍 Location: ${location} <br>
-                        ${lastDate} <br>
-                        <a href="${applyLink}" target="_blank" class="apply-btn">🔗 Apply Now</a>
-                    `;
-                    jobsList.appendChild(li);
+        function loadJobs() {
+            const jobsRef = ref(db, "jobs");
+            onValue(jobsRef, (snapshot) => {
+                const jobList = document.getElementById("job-list");
+                jobList.innerHTML = "";
+                snapshot.forEach((childSnapshot) => {
+                    const job = childSnapshot.val();
+                    const jobItem = document.createElement("div");
+                    jobItem.className = "job-item";
+                    jobItem.innerHTML = `<h3>${job.title}</h3><p>${job.description}</p><a href="${job.link}" target="_blank">आवेदन करें</a>`;
+                    jobList.appendChild(jobItem);
                 });
-            } else {
-                jobsList.innerHTML = "<p>⚠️ कोई सरकारी नौकरी उपलब्ध नहीं है।</p>";
-            }
-        });
+            });
+        }
+
+        window.onload = loadJobs;
     </script>
 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #ff4757;
+            padding: 15px;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .container {
+            padding: 20px;
+        }
+        .job-item {
+            background-color: white;
+            padding: 15px;
+            margin: 15px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        .job-item a {
+            text-decoration: none;
+            color: #ff4757;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: gray;
+        }
+    </style>
+
+</head>
+<body>
+    <header>🚀 सरकारी नौकरी अपडेट</header>
+    <div class="container" id="job-list">⏳ जॉब लोड हो रही हैं...</div>
+
+    <div class="footer">© 2025 JobXSuccess | सभी अधिकार सुरक्षित</div>
+
+    <!-- ✅ Service Worker को रजिस्टर करने का स्क्रिप्ट -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("service-worker.js")
+                .then((reg) => console.log('✅ Service Worker Registered!', reg))
+                .catch((err) => console.log('❌ Service Worker Registration Failed!', err));
+        }
+    </script>
 </body>
 </html>
