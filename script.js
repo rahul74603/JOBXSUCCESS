@@ -1,53 +1,44 @@
-// ✅ Service Worker रजिस्टर करें
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log('✅ Service Worker Registered!', reg))
-        .catch(err => console.log('❌ Service Worker Registration Failed!', err));
-}
+// script.js
 
-// ✅ Firebase Import करें
-import { initializeApp } from "./firebase-config.js"; // 🔴 इस फाइल को मत खोलना
+document.addEventListener("DOMContentLoaded", async function () {
+    console.log("Website Loaded Successfully!");
 
-// ✅ इंटरनेट कनेक्शन चेक करने का फंक्शन
-function checkInternet() {
-    if (!navigator.onLine) {
-        window.location.href = "offline.html"; // 🚀 इंटरनेट नहीं तो Offline Page दिखेगा
+    // 🔹 Firebase Config Import
+    let firebaseConfig = await getFirebaseConfig();
+    if (firebaseConfig) {
+        firebase.initializeApp(firebaseConfig);
+        console.log("Firebase Initialized Successfully!");
+    } else {
+        console.error("Failed to Load Firebase Config!");
     }
-}
 
-// ✅ पेज लोड होते ही इंटरनेट स्टेटस चेक करें
-window.addEventListener('load', checkInternet);
-window.addEventListener('online', () => console.log('✅ Online'));
-window.addEventListener('offline', () => {
-    console.log('❌ Offline');
-    window.location.href = "offline.html";
-});
+    // 🔹 Jobs Data Load करना
+    async function loadJobs() {
+        try {
+            let response = await fetch(firebaseConfig.API_URL);
+            let data = await response.json();
 
-// ✅ मैनिफेस्ट फाइल को डायनामिकली जोड़ना (PWA के लिए)
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register("service-worker.js")
-        .then(reg => console.log("✅ Service Worker Registered!", reg))
-        .catch(err => console.log("❌ Service Worker Registration Failed!", err));
-}
+            let jobContainer = document.getElementById("jobs-container");
+            jobContainer.innerHTML = "";
 
-// ✅ रियल-टाइम जॉब अपडेट्स के लिए Firebase से Data लोड करना
-function loadJobs() {
-    fetch('https://your-firebase-database-url/jobs.json') // 🔴 अपनी Firebase Database URL लगाएं
-        .then(response => response.json())
-        .then(data => {
-            let jobsContainer = document.getElementById("jobs-list");
-            jobsContainer.innerHTML = "";
             data.forEach(job => {
-                let jobItem = `<div class="job-card">
+                let jobElement = document.createElement("div");
+                jobElement.classList.add("job-item");
+                jobElement.innerHTML = `
                     <h3>${job.title}</h3>
-                    <p>${job.description}</p>
-                    <a href="${job.link}" target="_blank">🔗 आवेदन करें</a>
-                </div>`;
-                jobsContainer.innerHTML += jobItem;
+                    <p><strong>Company:</strong> ${job.company}</p>
+                    <p><strong>Location:</strong> ${job.location}</p>
+                    <a href="${job.link}" target="_blank">Apply Now</a>
+                `;
+                jobContainer.appendChild(jobElement);
             });
-        })
-        .catch(err => console.log("❌ जॉब लोड करने में समस्या:", err));
-}
+        } catch (error) {
+            console.error("Error fetching jobs:", error);
+        }
+    }
 
-// ✅ पेज लोड होते ही जॉब्स लोड करें
-window.addEventListener("load", loadJobs);
+    // 🔹 अगर Jobs Page है तो Data लोड करें
+    if (document.getElementById("jobs-container")) {
+        loadJobs();
+    }
+});
