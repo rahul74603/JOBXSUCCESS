@@ -1,101 +1,57 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>सरकारी नौकरी अपडेट - JobXSuccess</title>
+/* ✅ General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    text-align: center;
+}
 
-    <!-- ✅ Manifest.json लिंक -->
-    <link rel="manifest" href="manifest.json">
+/* ✅ Header */
+header {
+    background-color: #ff4757;
+    color: white;
+    padding: 15px;
+    font-size: 22px;
+    font-weight: bold;
+}
 
-    <!-- ✅ PWA के लिए Meta Tags -->
-    <meta name="theme-color" content="#ff4757">
-    <meta name="description" content="JobXSuccess - सरकारी नौकरी की जानकारी और स्टडी मटेरियल">
+/* ✅ Main Container */
+.container {
+    padding: 20px;
+}
 
-    <!-- ✅ Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
-    
-    <!-- ✅ Firebase Config (इसे सिर्फ इम्पोर्ट किया, ओपन नहीं किया) -->
-    <script type="module">
-        import { firebaseConfig } from './firebase-config.js';
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+/* ✅ Job & Study Sections */
+.section {
+    background-color: white;
+    padding: 15px;
+    margin: 15px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+}
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+/* ✅ Links */
+a {
+    text-decoration: none;
+    color: #ff4757;
+    font-weight: bold;
+}
 
-        function loadJobs() {
-            const jobsRef = ref(db, "jobs");
-            onValue(jobsRef, (snapshot) => {
-                const jobList = document.getElementById("job-list");
-                jobList.innerHTML = "";
-                snapshot.forEach((childSnapshot) => {
-                    const job = childSnapshot.val();
-                    const jobItem = document.createElement("div");
-                    jobItem.className = "job-item";
-                    jobItem.innerHTML = `<h3>${job.title}</h3><p>${job.description}</p><a href="${job.link}" target="_blank">आवेदन करें</a>`;
-                    jobList.appendChild(jobItem);
-                });
-            });
-        }
+/* ✅ Footer */
+.footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: gray;
+}
 
-        window.onload = loadJobs;
-    </script>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #ff4757;
-            padding: 15px;
-            color: white;
-            font-size: 22px;
-            font-weight: bold;
-        }
-        .container {
-            padding: 20px;
-        }
-        .job-item {
-            background-color: white;
-            padding: 15px;
-            margin: 15px auto;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 500px;
-        }
-        .job-item a {
-            text-decoration: none;
-            color: #ff4757;
-            font-weight: bold;
-        }
-        .footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: gray;
-        }
-    </style>
-
-</head>
-<body>
-    <header>🚀 सरकारी नौकरी अपडेट</header>
-    <div class="container" id="job-list">⏳ जॉब लोड हो रही हैं...</div>
-
-    <div class="footer">© 2025 JobXSuccess | सभी अधिकार सुरक्षित</div>
-
-    <!-- ✅ Service Worker को रजिस्टर करने का स्क्रिप्ट -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register("service-worker.js")
-                .then((reg) => console.log('✅ Service Worker Registered!', reg))
-                .catch((err) => console.log('❌ Service Worker Registration Failed!', err));
-        }
-    </script>
-</body>
-</html>
+/* ✅ Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    .section {
+        width: 95%;
+    }
+}
