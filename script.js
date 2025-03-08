@@ -1,5 +1,3 @@
-// script.js
-
 document.addEventListener("DOMContentLoaded", async function () {
     console.log("Website Loaded Successfully!");
 
@@ -28,12 +26,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                     <h3>${job.title}</h3>
                     <p><strong>Company:</strong> ${job.company}</p>
                     <p><strong>Location:</strong> ${job.location}</p>
-                    <a href="${job.link}" target="_blank">Apply Now</a>
+                    <a href="${job.link}" target="_blank" class="apply-button">Apply Now</a>
                 `;
                 jobContainer.appendChild(jobElement);
             });
         } catch (error) {
             console.error("Error fetching jobs:", error);
+            let jobContainer = document.getElementById("jobs-container");
+            jobContainer.innerHTML = `<p class="error-message">नौकरी की जानकारी लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।</p>`;
         }
     }
 
@@ -42,3 +42,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         loadJobs();
     }
 });
+
+// 🔹 Firebase Config Fetch करना
+async function getFirebaseConfig() {
+    try {
+        let response = await fetch("https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_ID/exec");
+        let data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching Firebase Config:", error);
+        return null;
+    }
+}
