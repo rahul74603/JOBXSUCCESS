@@ -1,11 +1,18 @@
+// 🔹 Firebase Config Import
+import firebaseConfig from './firebase-config.js';
+
 document.addEventListener("DOMContentLoaded", async function () {
     console.log("Website Loaded Successfully!");
 
-    // 🔹 Firebase Config Import
-    let firebaseConfig = await getFirebaseConfig();
+    // 🔹 Firebase Initialization
     if (firebaseConfig) {
-        firebase.initializeApp(firebaseConfig);
-        console.log("Firebase Initialized Successfully!");
+        // Ensure Firebase SDK is imported
+        if (typeof firebase !== 'undefined') {
+            firebase.initializeApp(firebaseConfig);
+            console.log("Firebase Initialized Successfully!");
+        } else {
+            console.error("Firebase SDK not loaded!");
+        }
     } else {
         console.error("Failed to Load Firebase Config!");
     }
@@ -14,22 +21,29 @@ document.addEventListener("DOMContentLoaded", async function () {
     async function loadJobs() {
         try {
             let response = await fetch(firebaseConfig.API_URL);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             let data = await response.json();
 
             let jobContainer = document.getElementById("jobs-container");
             jobContainer.innerHTML = "";
 
-            data.forEach(job => {
-                let jobElement = document.createElement("div");
-                jobElement.classList.add("job-item");
-                jobElement.innerHTML = `
-                    <h3>${job.title}</h3>
-                    <p><strong>Company:</strong> ${job.company}</p>
-                    <p><strong>Location:</strong> ${job.location}</p>
-                    <a href="${job.link}" target="_blank" class="apply-button">Apply Now</a>
-                `;
-                jobContainer.appendChild(jobElement);
-            });
+            if (Array.isArray(data)) {
+                data.forEach(job => {
+                    let jobElement = document.createElement("div");
+                    jobElement.classList.add("job-item");
+                    jobElement.innerHTML = `
+                        <h3>${job.title}</h3>
+                        <p><strong>Company:</strong> ${job.company}</p>
+                        <p><strong>Location:</strong> ${job.location}</p>
+                        <a href="${job.link}" target="_blank" class="apply-button">Apply Now</a>
+                    `;
+                    jobContainer.appendChild(jobElement);
+                });
+            } else {
+                throw new Error("Invalid data format received from API");
+            }
         } catch (error) {
             console.error("Error fetching jobs:", error);
             let jobContainer = document.getElementById("jobs-container");
@@ -42,15 +56,3 @@ document.addEventListener("DOMContentLoaded", async function () {
         loadJobs();
     }
 });
-
-// 🔹 Firebase Config Fetch करना
-async function getFirebaseConfig() {
-    try {
-        let response = await fetch("https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_ID/exec");
-        let data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Error fetching Firebase Config:", error);
-        return null;
-    }
-}
