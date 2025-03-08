@@ -1,18 +1,17 @@
-// कैश का नाम और संस्करण
-const CACHE_NAME = 'jobxsuccess-v1';
+const CACHE_NAME = 'jobxsuccess-v2'; // 🔹 वर्ज़न अपडेट किया
 
-// कैश करने के लिए संसाधनों की सूची
 const urlsToCache = [
-  '/',                  // मुख्य पृष्ठ (index.html)
-  '/index.html',        // HTML फ़ाइल
-  '/style.css',         // CSS फ़ाइल
-  '/script.js',         // JavaScript फ़ाइल
-  '/icons/icon-192x192.png', // आइकन
-  '/icons/icon-512x512.png', // आइकन
-  '/offline.html'       // ऑफ़लाइन पेज
+  '/',  
+  '/index.html',  
+  '/jobs.html',    // 🔹 जोड़ा गया
+  '/study.html',   // 🔹 जोड़ा गया
+  '/style.css',  
+  '/manifest.json', // 🔹 manifest.json जोड़ा
+  '/icons/icon-192x192.png',  
+  '/icons/icon-512x512.png',  
+  '/offline.html'  // 🔹 नया ऑफ़लाइन पेज
 ];
 
-// इंस्टॉल इवेंट: संसाधनों को कैश करें
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');
   event.waitUntil(
@@ -24,7 +23,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// एक्टिवेट इवेंट: पुराने कैश को हटाएं
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating...');
   const cacheWhitelist = [CACHE_NAME];
@@ -42,28 +40,25 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// फ़ेच इवेंट: कैश से संसाधन प्रदान करें
 self.addEventListener('fetch', (event) => {
-  console.log('Fetching:', event.request.url);
+  // 🔹 नेटवर्क-फर्स्ट स्ट्रैटेजी (डायनामिक कॉन्टेंट के लिए)
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then((response) => {
-        if (response) {
-          console.log('Found in cache:', event.request.url);
-          return response; // कैश से प्रतिक्रिया दें
-        }
-        console.log('Not found in cache, fetching from network:', event.request.url);
-        return fetch(event.request)
+        // नए डेटा को कैश करें
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME)
+          .then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        return response;
+      })
+      .catch(() => {
+        // कैश से डेटा दिखाएं अगर नेटवर्क नहीं है
+        return caches.match(event.request)
           .then((response) => {
-            // नए संसाधन को कैश में जोड़ें
-            return caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, response.clone());
-                return response;
-              });
-          })
-          .catch(() => {
-            // नेटवर्क विफल होने पर ऑफ़लाइन पेज दिखाएं
+            if (response) return response;
+            // अगर कुछ भी नहीं मिला तो ऑफ़लाइन पेज दिखाएं
             return caches.match('/offline.html');
           });
       })
