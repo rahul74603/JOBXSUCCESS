@@ -1,57 +1,70 @@
-/* ✅ General Styles */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f8f8;
-    text-align: center;
-}
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>सरकारी नौकरी अपडेट - JobXSuccess</title>
 
-/* ✅ Header */
-header {
-    background-color: #ff4757;
-    color: white;
-    padding: 15px;
-    font-size: 22px;
-    font-weight: bold;
-}
+    <!-- ✅ Manifest.json (PWA) -->
+    <link rel="manifest" href="manifest.json">
 
-/* ✅ Main Container */
-.container {
-    padding: 20px;
-}
+    <!-- ✅ Stylesheet -->
+    <link rel="stylesheet" href="style.css">
 
-/* ✅ Job & Study Sections */
-.section {
-    background-color: white;
-    padding: 15px;
-    margin: 15px auto;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 500px;
-}
+    <!-- ✅ Meta Tags for PWA -->
+    <meta name="theme-color" content="#007bff">
+    <meta name="description" content="JobXSuccess - ताज़ा सरकारी नौकरी की जानकारी">
 
-/* ✅ Links */
-a {
-    text-decoration: none;
-    color: #ff4757;
-    font-weight: bold;
-}
+</head>
+<body>
 
-/* ✅ Footer */
-.footer {
-    margin-top: 20px;
-    font-size: 14px;
-    color: gray;
-}
+    <header>🚀 सरकारी नौकरी अपडेट</header>
 
-/* ✅ Responsive Design */
-@media (max-width: 600px) {
-    .container {
-        padding: 10px;
-    }
-    .section {
-        width: 95%;
-    }
-}
+    <div class="container">
+        <h2>📌 ताज़ा नौकरी अपडेट्स</h2>
+        <ul id="job-list"></ul>
+    </div>
+
+    <div class="footer">
+        <a href="index.html">🏠 होम</a> | 
+        <a href="study.html">📚 स्टडी मटेरियल</a>
+        <br>© 2025 JobXSuccess | सभी अधिकार सुरक्षित
+    </div>
+
+    <!-- ✅ Firebase Config Import -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+        import firebaseConfig from "./firebase-config.js";
+        initializeApp(firebaseConfig);
+    </script>
+
+    <!-- ✅ सरकारी नौकरी API से डेटा लोड करना -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('https://job-api.example.com/latest-jobs') // ✅ अपनी API का URL डालें
+            .then(response => response.json())
+            .then(data => {
+                const jobList = document.getElementById("job-list");
+                jobList.innerHTML = ""; // पहले की लिस्ट हटाएं
+                data.jobs.forEach(job => {
+                    let li = document.createElement("li");
+                    li.innerHTML = `<strong>${job.title}</strong> - ${job.company} (${job.location})<br>
+                                    <a href="${job.apply_link}" target="_blank">🔗 Apply Now</a>`;
+                    jobList.appendChild(li);
+                });
+            })
+            .catch(error => console.error("❌ नौकरी डेटा लोड करने में समस्या:", error));
+        });
+    </script>
+
+    <!-- ✅ Service Worker (PWA) -->
+    <script>
+      if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register("service-worker.js")
+          .then((reg) => console.log('✅ Service Worker Registered!', reg))
+          .catch((err) => console.log('❌ Service Worker Registration Failed!', err));
+      }
+    </script>
+
+</body>
+</html>
