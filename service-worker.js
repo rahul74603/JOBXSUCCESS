@@ -1,16 +1,20 @@
-const CACHE_NAME = 'jobxsuccess-v2';
+// कैश का नाम और संस्करण
+const CACHE_NAME = 'jobxsuccess-v1';
+
+// कैश करने के लिए संसाधनों की सूची
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/jobs.html',
-  '/study.html',
-  '/offline.html' // ऑफ़लाइन पेज जोड़ें
+  '/',                  // मुख्य पृष्ठ (index.html)
+  '/index.html',        // HTML फ़ाइल
+  '/style.css',         // CSS फ़ाइल
+  '/script.js',         // JavaScript फ़ाइल
+  '/icons/icon-192x192.png', // आइकन
+  '/icons/icon-512x512.png', // आइकन
+  '/offline.html'       // ऑफ़लाइन पेज
 ];
 
-// इंस्टॉल इवेंट
+// इंस्टॉल इवेंट: संसाधनों को कैश करें
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing.');
+  console.log('Service Worker installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -20,9 +24,9 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// एक्टिवेट इवेंट
+// एक्टिवेट इवेंट: पुराने कैश को हटाएं
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating.');
+  console.log('Service Worker activating...');
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -38,7 +42,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// फ़ेच इवेंट
+// फ़ेच इवेंट: कैश से संसाधन प्रदान करें
 self.addEventListener('fetch', (event) => {
   console.log('Fetching:', event.request.url);
   event.respondWith(
@@ -46,12 +50,12 @@ self.addEventListener('fetch', (event) => {
       .then((response) => {
         if (response) {
           console.log('Found in cache:', event.request.url);
-          return response;
+          return response; // कैश से प्रतिक्रिया दें
         }
         console.log('Not found in cache, fetching from network:', event.request.url);
         return fetch(event.request)
           .then((response) => {
-            // कैश में नई प्रतिक्रिया जोड़ें
+            // नए संसाधन को कैश में जोड़ें
             return caches.open(CACHE_NAME)
               .then((cache) => {
                 cache.put(event.request, response.clone());
