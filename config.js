@@ -1,18 +1,15 @@
-async function getFirebaseConfig() {
-    try {
-        const response = await fetch("https://raw.githubusercontent.com/rahul74603/JOBXSUCCESS/main/firebase-config.json");
+// config.js
 
-        if (!response.ok) {
-            throw new Error(`⚠️ HTTP Error! Status: ${response.status}`);
-        }
-
-        const config = await response.json();
-        return config;
-    } catch (error) {
-        console.error("🔥 Firebase Config Load करने में दिक्कत आई:", error);
-        return null; // ❌ Error आने पर null Return होगा
-    }
+async function loadConfig() {
+    let firebaseConfig = await getFirebaseConfig();
+    return {
+        SITE_NAME: "JOBXSUCCESS",
+        API_URL: firebaseConfig.API_URL, // 🔹 API URL को डायनामिक रूप से लोड करें
+    };
 }
 
-// ✅ Firebase Config को Import करने के लिए Export करना
-export default getFirebaseConfig;
+// 🔹 वेबसाइट का टाइटल अपडेट करना
+document.addEventListener("DOMContentLoaded", async function () {
+    let config = await loadConfig();
+    document.title = config.SITE_NAME;
+});
