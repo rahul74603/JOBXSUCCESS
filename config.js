@@ -1,7 +1,7 @@
 async function fetchJobData() {
     try {
-        let apiKey = "Thaviper@01"; // अपनी API Key डालो
-        let apiUrl = "https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec?key=" + thaviper@01; 
+        let apiKey = localStorage.getItem("apiKey"); // Secure तरीके से API Key लो
+        let apiUrl = `https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec?key=${apiKey}`; 
 
         let response = await fetch(apiUrl);
         let data = await response.json();
