@@ -1,192 +1,99 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>सरकारी नौकरियाँ - JOBXSUCCESS</title>
+    <title>Job Listings</title>
     <link rel="stylesheet" href="style.css">
-    <!-- ✅ Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <!-- ✅ Firebase SDK -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js"></script> <!-- Agar Firestore use kar rahe hain -->
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f4f4f4;
-            color: #333;
-        }
-        header {
-            background: #007bff;
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 10px 0 0;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        nav ul li {
-            display: inline;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-        }
-        nav ul li a:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        main {
-            padding: 20px;
-            text-align: center;
-        }
-        #jobs-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .job-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: #fff;
-        }
-        .job-item h3 {
-            margin: 0 0 10px;
-            color: #007bff;
-        }
-        .job-item p {
-            margin: 5px 0;
-        }
-        .apply-button {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 15px;
-            background: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-        }
-        .apply-button:hover {
-            background: #218838;
-        }
-        .error-message {
-            color: #dc3545;
-            font-weight: bold;
-        }
-        footer {
-            text-align: center;
-            padding: 15px;
-            background: #007bff;
-            color: white;
-            margin-top: 20px;
-            font-size: 0.9rem;
-        }
-    </style>
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js"></script>
 </head>
 <body>
+    <h1>Latest Job Listings</h1>
 
-    <header>
-        <h1>सरकारी नौकरियाँ</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">होम</a></li>
-                <li><a href="jobs.html">सरकारी नौकरियाँ</a></li>
-                <li><a href="study.html">स्टडी मटेरियल</a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- Filters -->
+    <div class="filters">
+        <select id="jobTypeFilter">
+            <option value="">Select Job Type</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+        </select>
+        
+        <select id="locationFilter">
+            <option value="">Select Location</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Bangalore">Bangalore</option>
+        </select>
 
-    <main>
-        <h2>लेटेस्ट सरकारी नौकरी अपडेट</h2>
-        <div id="jobs-container">
-            <p>नौकरी की जानकारी लोड हो रही है...</p>
-        </div>
-    </main>
+        <button onclick="applyFilters()">Apply Filters</button>
+    </div>
 
-    <footer>
-        <p>&copy; 2025 JOBXSUCCESS. सभी अधिकार सुरक्षित</p>
-    </footer>
+    <!-- Loading Animation -->
+    <div id="loading">Loading Jobs...</div>
 
-    <!-- ✅ Firebase Config and Script -->
-    <script type="module">
-        import firebaseConfig from './firebase-config.js';
+    <!-- Jobs Container -->
+    <div id="jobs-container"></div>
 
-        document.addEventListener("DOMContentLoaded", async function () {
-            console.log("Website Loaded Successfully!");
+    <script src="firebase-config.js"></script>
+    <script>
+        // Check Firebase Initialization
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        } else {
+            console.log("Firebase already initialized!");
+        }
 
-            // 🔹 Firebase Initialization
-            if (firebaseConfig) {
-                if (typeof firebase !== 'undefined') {
-                    firebase.initializeApp(firebaseConfig);
-                    console.log("Firebase Initialized Successfully!");
-                } else {
-                    console.error("Firebase SDK not loaded!");
-                }
-            } else {
-                console.error("Failed to Load Firebase Config!");
+        // Fetch Jobs Data
+        async function fetchJobs() {
+            document.getElementById("loading").style.display = "block"; // Show Loading
+            try {
+                let response = await fetch(firebaseConfig.API_URL);
+                let data = await response.json();
+                displayJobs(data);
+            } catch (error) {
+                console.error("Error fetching jobs:", error);
             }
+            document.getElementById("loading").style.display = "none"; // Hide Loading
+        }
 
-            // 🔹 Jobs Data Load करना
-            async function loadJobs() {
-                try {
-                    let response = await fetch(firebaseConfig.API_URL);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    let data = await response.json();
-                    console.log("Jobs Data:", data); // Debugging ke liye data log karein
+        // Display Jobs
+        function displayJobs(jobs) {
+            let container = document.getElementById("jobs-container");
+            container.innerHTML = "";
+            jobs.forEach(job => {
+                let jobCard = `
+                    <div class="job">
+                        <h3>${job.title}</h3>
+                        <p><strong>Company:</strong> ${job.company}</p>
+                        <p><strong>Location:</strong> ${job.location}</p>
+                        <p><strong>Type:</strong> ${job.type}</p>
+                        <a href="${job.link}" target="_blank">Apply Now</a>
+                    </div>
+                `;
+                container.innerHTML += jobCard;
+            });
+        }
 
-                    let jobContainer = document.getElementById("jobs-container");
-                    jobContainer.innerHTML = "";
+        // Apply Filters
+        function applyFilters() {
+            let type = document.getElementById("jobTypeFilter").value;
+            let location = document.getElementById("locationFilter").value;
+            
+            fetch(firebaseConfig.API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    let filteredJobs = data.filter(job => 
+                        (type ? job.type === type : true) &&
+                        (location ? job.location === location : true)
+                    );
+                    displayJobs(filteredJobs);
+                })
+                .catch(error => console.error("Error filtering jobs:", error));
+        }
 
-                    if (Array.isArray(data)) {
-                        data.forEach(job => {
-                            let jobElement = document.createElement("div");
-                            jobElement.classList.add("job-item");
-                            jobElement.innerHTML = `
-                                <h3>${job.title}</h3>
-                                <p><strong>Company:</strong> ${job.company}</p>
-                                <p><strong>Location:</strong> ${job.location}</p>
-                                <a href="${job.link}" target="_blank" class="apply-button">Apply Now</a>
-                            `;
-                            jobContainer.appendChild(jobElement);
-                        });
-                    } else {
-                        throw new Error("Invalid data format received from API");
-                    }
-                } catch (error) {
-                    console.error("Error fetching jobs:", error);
-                    let jobContainer = document.getElementById("jobs-container");
-                    jobContainer.innerHTML = `<p class="error-message">नौकरी की जानकारी लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।</p>`;
-                }
-            }
-
-            // 🔹 अगर Jobs Page है तो Data लोड करें
-            if (document.getElementById("jobs-container")) {
-                loadJobs();
-            }
-        });
+        fetchJobs(); // Load Jobs on Page Load
     </script>
 </body>
 </html>
