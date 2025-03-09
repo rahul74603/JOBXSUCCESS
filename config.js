@@ -1,19 +1,13 @@
 async function fetchJobData() {
     try {
-        let apiKey = "XXXX1"; // अपनी API Key डालें
-        let apiUrl = "https://script.google.com/macros/s/AKfycbxyz12345/exec?key=" + apiKey;
+        let apiKey = "XXXX1"; // अपनी API Key डालो
+        let apiUrl = "https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec?key=" + thaviper@01; 
 
         let response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-
         let data = await response.json();
-        console.log(data); // Console में चेक करने के लिए
 
-        // यहाँ से आप डेटा को अपनी HTML में ऐड कर सकते हैं
         let jobList = document.getElementById("job-list");
-        jobList.innerHTML = ""; // पुराना डेटा हटाएं
+        jobList.innerHTML = ""; // पुराना डेटा हटाओ
 
         data.forEach(job => {
             let jobItem = document.createElement("div");
@@ -22,9 +16,9 @@ async function fetchJobData() {
         });
 
     } catch (error) {
-        console.error("Error fetching job data:", error);
+        console.error("Error:", error);
     }
 }
 
-// जब पेज लोड हो, तब API कॉल करें
+// जब पेज खुले तो API से डेटा लाओ
 document.addEventListener("DOMContentLoaded", fetchJobData);
