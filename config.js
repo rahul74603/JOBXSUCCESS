@@ -1,7 +1,12 @@
 async function fetchJobData() {
     try {
-        let apiKey = localStorage.getItem("apiKey"); // Secure तरीके से API Key लो
-        let apiUrl = `https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec?key=${apiKey}`; 
+        let apiKey = localStorage.getItem("apiKey"); // Local Storage से API Key लो
+        if (!apiKey) {
+            console.error("❌ API Key नहीं मिली! पहले इसे Local Storage में Save करो।");
+            return;
+        }
+
+        let apiUrl = `https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec?key=${apiKey}`;
 
         let response = await fetch(apiUrl);
         let data = await response.json();
@@ -16,7 +21,7 @@ async function fetchJobData() {
         });
 
     } catch (error) {
-        console.error("Error:", error);
+        console.error("❌ Error:", error);
     }
 }
 
