@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // ✅ 2️⃣ Jobs Data Load करना
     async function loadJobs() {
         try {
-            let response = await fetch(API_URL);
+            let response = await fetch(https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
