@@ -6,6 +6,25 @@
     <title>सरकारी नौकरी अपडेट</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Navigation Bar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: #007BFF;
+            padding: 10px 20px;
+            color: white;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table Styles */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -28,9 +47,25 @@
         a:hover {
             text-decoration: underline;
         }
+
+        /* Loading Animation */
+        #loading {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div>
+            <a href="#home">Home</a>
+            <a href="#study-materials">Study Materials</a>
+        </div>
+        <div>
+            <a href="javascript:history.back()">Back</a>
+        </div>
+    </div>
+
     <h1>📢 ताज़ा सरकारी नौकरियाँ</h1>
 
     <!-- Loading Animation -->
