@@ -35,60 +35,6 @@
 
     <!-- ✅ Config.js Include -->
     <script src="config.js"></script>
-
-    <script>
-        let allJobs = [];
-
-        // ✅ Fetch Jobs Data from API
-        async function fetchJobs() {
-            document.getElementById("loading").style.display = "block"; // Show Loading
-            try {
-                let response = await fetch(API_URL);
-                let data = await response.json();
-                allJobs = data; // Save Data for Filtering
-                displayJobs(allJobs);
-            } catch (error) {
-                console.error("❌ जॉब लाने में समस्या:", error);
-            }
-            document.getElementById("loading").style.display = "none"; // Hide Loading
-        }
-
-        // ✅ Display Jobs
-        function displayJobs(jobs) {
-            let container = document.getElementById("jobs-container");
-            container.innerHTML = "";
-            if (jobs.length === 0) {
-                container.innerHTML = "<p>⚠️ कोई नौकरी उपलब्ध नहीं है!</p>";
-                return;
-            }
-            jobs.forEach(job => {
-                let jobCard = `
-                    <div class="job">
-                        <h3>${job.title}</h3>
-                        <p><strong>🏢 कंपनी:</strong> ${job.company}</p>
-                        <p><strong>📍 स्थान:</strong> ${job.location}</p>
-                        <p><strong>💼 प्रकार:</strong> ${job.type}</p>
-                        <a href="${job.link}" target="_blank">➡️ अभी आवेदन करें</a>
-                    </div>
-                `;
-                container.innerHTML += jobCard;
-            });
-        }
-
-        // ✅ Apply Filters
-        function applyFilters() {
-            let type = document.getElementById("jobTypeFilter").value;
-            let location = document.getElementById("locationFilter").value;
-
-            let filteredJobs = allJobs.filter(job => 
-                (type ? job.type === type : true) &&
-                (location ? job.location === location : true)
-            );
-
-            displayJobs(filteredJobs);
-        }
-
-        fetchJobs(); // Load Jobs on Page Load
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
