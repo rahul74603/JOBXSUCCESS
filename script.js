@@ -1,28 +1,23 @@
-import config from './config.js';
-
 document.addEventListener("DOMContentLoaded", async function () {
     console.log("🚀 Website Loaded Successfully!");
 
-    // ✅ 1️⃣ Secure API Key Load करना
-    let apiKey = localStorage.getItem("API_KEY");
-    if (!apiKey) {
-        console.error("❌ API Key Not Found in Local Storage!");
-    } else {
-        console.log("✅ API Key Loaded from Local Storage:", apiKey);
-    }
+    // ✅ API_URL को Global Scope से एक्सेस करो
+    let API_URL = window.config.API_URL;
 
     // ✅ 2️⃣ Jobs Data Load करना
     async function loadJobs() {
         try {
-            let apiUrl = `${config.API_URL}?key=${apiKey}`;
-            let response = await fetch(apiUrl);
+            let response = await fetch(API_URL);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            let data = await response.json();
+            let result = await response.json();
+
+            // ✅ Google Sheets API से डेटा सही तरीके से एक्सेस करना
+            let data = result.data || result; // अगर डेटा `data` key में हो
 
             let jobContainer = document.getElementById("jobs-container");
-            jobContainer.innerHTML = ""; // Clear Old Jobs
+            jobContainer.innerHTML = ""; // पुराना डेटा साफ करें
 
             if (Array.isArray(data)) {
                 data.forEach(job => {
@@ -30,9 +25,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                     jobElement.classList.add("job-item");
                     jobElement.innerHTML = `
                         <h3>${job.title}</h3>
-                        <p><strong>Company:</strong> ${job.company}</p>
-                        <p><strong>Location:</strong> ${job.location}</p>
-                        <a href="${job.link}" target="_blank" class="apply-button">Apply Now</a>
+                        <p><strong>🏢 कंपनी:</strong> ${job.company}</p>
+                        <p><strong>📍 स्थान:</strong> ${job.location}</p>
+                        <p><strong>💼 प्रकार:</strong> ${job.type}</p>
+                        <a href="${job.link}" target="_blank" class="apply-button">➡️ अभी आवेदन करें</a>
                     `;
                     jobContainer.appendChild(jobElement);
                 });
