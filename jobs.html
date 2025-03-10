@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>सरकारी नौकरी अपडेट</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
     <h1>📢 ताज़ा सरकारी नौकरियाँ</h1>
@@ -30,11 +46,70 @@
     <!-- Loading Animation -->
     <div id="loading">⏳ नौकरियाँ लोड हो रही हैं...</div>
 
-    <!-- Jobs Container -->
-    <div id="jobs-container"></div>
+    <!-- Jobs Table -->
+    <table id="jobs-table">
+        <thead>
+            <tr>
+                <th>JOBS TITLE</th>
+                <th>ORGANIZATION</th>
+                <th>LAST DATE</th>
+                <th>APPLY LINK</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Job rows will be inserted here by JavaScript -->
+        </tbody>
+    </table>
 
     <!-- ✅ Config.js Include -->
     <script src="config.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // Sample job data
+        const jobs = [
+            { title: "Software Engineer", organization: "Tech Corp", lastDate: "2025-04-01", applyLink: "https://example.com/apply1" },
+            { title: "Data Analyst", organization: "Data Inc", lastDate: "2025-03-25", applyLink: "https://example.com/apply2" },
+            { title: "Project Manager", organization: "Build Ltd", lastDate: "2025-03-30", applyLink: "https://example.com/apply3" }
+        ];
+
+        function loadJobs() {
+            const tableBody = document.querySelector("#jobs-table tbody");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            jobs.forEach(job => {
+                const row = document.createElement("tr");
+
+                const titleCell = document.createElement("td");
+                titleCell.textContent = job.title;
+                row.appendChild(titleCell);
+
+                const orgCell = document.createElement("td");
+                orgCell.textContent = job.organization;
+                row.appendChild(orgCell);
+
+                const dateCell = document.createElement("td");
+                dateCell.textContent = job.lastDate;
+                row.appendChild(dateCell);
+
+                const linkCell = document.createElement("td");
+                const link = document.createElement("a");
+                link.href = job.applyLink;
+                link.textContent = "Apply";
+                link.target = "_blank";
+                linkCell.appendChild(link);
+                row.appendChild(linkCell);
+
+                tableBody.appendChild(row);
+            });
+
+            document.getElementById("loading").style.display = "none";
+        }
+
+        function applyFilters() {
+            // Implement filter logic here
+            loadJobs();
+        }
+
+        document.addEventListener("DOMContentLoaded", loadJobs);
+    </script>
 </body>
 </html>
