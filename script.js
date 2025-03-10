@@ -1,35 +1,28 @@
-import firebaseConfig from './firebase-config.js';
+import config from './config.js';
 
 document.addEventListener("DOMContentLoaded", async function () {
-    console.log("Website Loaded Successfully!");
+    console.log("🚀 Website Loaded Successfully!");
 
-    // 🔹 Firebase Initialization
-    if (firebaseConfig) {
-        if (typeof firebase !== 'undefined') {
-            firebase.initializeApp(firebaseConfig);
-            console.log("Firebase Initialized Successfully!");
-        } else {
-            console.error("Firebase SDK not loaded!");
-        }
+    // ✅ 1️⃣ Secure API Key Load करना
+    let apiKey = localStorage.getItem("API_KEY");
+    if (!apiKey) {
+        console.error("❌ API Key Not Found in Local Storage!");
     } else {
-        console.error("Failed to Load Firebase Config!");
+        console.log("✅ API Key Loaded from Local Storage:", apiKey);
     }
 
-    // 🔹 API URL को Local Storage से Fetch करो
-    let apiKey = localStorage.getItem("API_KEY"); // 🔥 API Key Local Storage से
-    let apiUrl = `https://script.google.com/macros/s/AKfycbx.../exec?key=${apiKey}`;
-
-    // 🔹 Jobs Data Load करना (Using Google Sheets App Script URL)
+    // ✅ 2️⃣ Jobs Data Load करना
     async function loadJobs() {
         try {
+            let apiUrl = `${config.API_URL}?key=${apiKey}`;
             let response = await fetch(apiUrl);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
             let data = await response.json();
 
             let jobContainer = document.getElementById("jobs-container");
-            jobContainer.innerHTML = "";
+            jobContainer.innerHTML = ""; // Clear Old Jobs
 
             if (Array.isArray(data)) {
                 data.forEach(job => {
@@ -44,16 +37,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                     jobContainer.appendChild(jobElement);
                 });
             } else {
-                throw new Error("Invalid data format received from API");
+                throw new Error("Invalid Data Format Received from API");
             }
         } catch (error) {
-            console.error("Error fetching jobs:", error);
+            console.error("❌ Error Fetching Jobs:", error);
             let jobContainer = document.getElementById("jobs-container");
-            jobContainer.innerHTML = `<p class="error-message">नौकरी की जानकारी लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।</p>`;
+            jobContainer.innerHTML = `<p class="error-message">❌ नौकरी की जानकारी लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।</p>`;
         }
     }
 
-    // 🔹 अगर Jobs Page है तो Data लोड करें
+    // ✅ 3️⃣ अगर Jobs Page है तो Data लोड करें
     if (document.getElementById("jobs-container")) {
         loadJobs();
     }
