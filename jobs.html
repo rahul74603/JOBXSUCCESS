@@ -9,39 +9,29 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         table, th, td {
             border: 1px solid black;
         }
         th, td {
-            padding: 8px;
+            padding: 10px;
             text-align: left;
         }
         th {
             background-color: #f2f2f2;
         }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <h1>📢 ताज़ा सरकारी नौकरियाँ</h1>
-
-    <!-- Filters -->
-    <div class="filters">
-        <select id="jobTypeFilter">
-            <option value="">नौकरी का प्रकार चुनें</option>
-            <option value="Full-time">Full-time</option>
-            <option value="Part-time">Part-time</option>
-        </select>
-        
-        <select id="locationFilter">
-            <option value="">स्थान चुनें</option>
-            <option value="Delhi">दिल्ली</option>
-            <option value="Mumbai">मुंबई</option>
-            <option value="Bangalore">बेंगलुरु</option>
-        </select>
-
-        <button onclick="applyFilters()">🔍 फ़िल्टर लागू करें</button>
-    </div>
 
     <!-- Loading Animation -->
     <div id="loading">⏳ नौकरियाँ लोड हो रही हैं...</div>
@@ -64,11 +54,14 @@
     <!-- ✅ Config.js Include -->
     <script src="config.js"></script>
     <script>
-        // Sample job data
+        // Sample job data (can be replaced with real data)
         const jobs = [
             { title: "Software Engineer", organization: "Tech Corp", lastDate: "2025-04-01", applyLink: "https://example.com/apply1" },
             { title: "Data Analyst", organization: "Data Inc", lastDate: "2025-03-25", applyLink: "https://example.com/apply2" },
-            { title: "Project Manager", organization: "Build Ltd", lastDate: "2025-03-30", applyLink: "https://example.com/apply3" }
+            { title: "Project Manager", organization: "Build Ltd", lastDate: "2025-03-30", applyLink: "https://example.com/apply3" },
+            { title: "Web Developer", organization: "Web Solutions", lastDate: "2025-04-05", applyLink: "https://example.com/apply4" },
+            { title: "Graphic Designer", organization: "Creative Studio", lastDate: "2025-03-28", applyLink: "https://example.com/apply5" },
+            // Add more jobs as needed
         ];
 
         function loadJobs() {
@@ -104,11 +97,7 @@
             document.getElementById("loading").style.display = "none";
         }
 
-        function applyFilters() {
-            // Implement filter logic here
-            loadJobs();
-        }
-
+        // Load jobs when the page is loaded
         document.addEventListener("DOMContentLoaded", loadJobs);
     </script>
 </body>
