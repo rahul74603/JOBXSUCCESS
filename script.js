@@ -13,37 +13,38 @@ document.addEventListener("DOMContentLoaded", async function () {
     // ✅ API_URL को Define करें (Google Apps Script URL + API Key)
     let API_URL = `https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec?key=${apiKey}`;
 
-    // ✅ 2️⃣ Jobs Data Load करना (LocalStorage के साथ)
+    // ✅ 2️⃣ Jobs Data Load करना (LocalStorage Cache के साथ)
     async function loadJobs() {
         try {
+            let jobContainer = document.getElementById("jobs-container");
+            jobContainer.innerHTML = `<p>⏳ नौकरी की जानकारी लोड हो रही है...</p>`;
+
             // 🔹 पहले LocalStorage से Cache चेक करें
             let cachedJobs = localStorage.getItem("jobsData");
             if (cachedJobs) {
-                console.log("🟢 Loading Cached Jobs...");
+                console.log("🟢 Cached Jobs Loaded...");
                 displayJobs(JSON.parse(cachedJobs));
             }
 
-            // 🔹 फिर API से नया डेटा लाएं
+            // 🔹 API से नया डेटा लाएं (Cache Bypass करने के लिए टाइमस्टैम्प जोड़ें)
             console.log("🌍 Fetching Jobs from API...");
-            let response = await fetch(API_URL + `&t=${new Date().getTime()}`); // Cache Bypass
+            let response = await fetch(`${API_URL}&t=${new Date().getTime()}`);
+
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
             let result = await response.json();
-            let data = result.data || result; // अगर डेटा `data` key में हो
+            let data = result.data || result; // अगर डेटा `data` key में है, तो उसे लें
 
-            if (Array.isArray(data)) {
-                // 🔹 LocalStorage में Save करें
-                localStorage.setItem("jobsData", JSON.stringify(data));
+            if (!Array.isArray(data)) throw new Error("Invalid Data Format Received from API");
 
-                // 🔹 UI पर Show करें
-                displayJobs(data);
-            } else {
-                throw new Error("Invalid Data Format Received from API");
-            }
+            // 🔹 LocalStorage में Save करें
+            localStorage.setItem("jobsData", JSON.stringify(data));
+
+            // 🔹 UI पर Show करें
+            displayJobs(data);
         } catch (error) {
             console.error("❌ Error Fetching Jobs:", error);
-            let jobContainer = document.getElementById("jobs-container");
-            jobContainer.innerHTML = `<p class="error-message">❌ नौकरी की जानकारी लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।</p>`;
+            document.getElementById("jobs-container").innerHTML = `<p class="error-message">❌ नौकरी की जानकारी लोड करने में समस्या आई।</p>`;
         }
     }
 
@@ -52,15 +53,19 @@ document.addEventListener("DOMContentLoaded", async function () {
         let jobContainer = document.getElementById("jobs-container");
         jobContainer.innerHTML = ""; // पुराना डेटा साफ करें
 
+        if (data.length === 0) {
+            jobContainer.innerHTML = `<p>⚠️ अभी कोई नौकरियाँ उपलब्ध नहीं हैं।</p>`;
+            return;
+        }
+
         data.forEach(job => {
             let jobElement = document.createElement("div");
             jobElement.classList.add("job-item");
             jobElement.innerHTML = `
                 <h3>${job.title}</h3>
-                <p><strong>🏢 कंपनी:</strong> ${job.company}</p>
-                <p><strong>📍 स्थान:</strong> ${job.location}</p>
-                <p><strong>💼 प्रकार:</strong> ${job.type}</p>
-                <a href="${job.link}" target="_blank" class="apply-button">➡️ अभी आवेदन करें</a>
+                <p><strong>🏢 कंपनी:</strong> ${job.organization || "N/A"}</p>
+                <p><strong>📅 अंतिम तिथि:</strong> ${job.lastDate || "N/A"}</p>
+                <a href="${job.applyLink}" target="_blank" class="apply-button">➡️ अभी आवेदन करें</a>
             `;
             jobContainer.appendChild(jobElement);
         });
