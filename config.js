@@ -1,3 +1,2 @@
-window.config = {
-    API_URL: "https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec"
-};
+const API_URL = "https://script.google.com/macros/s/AKfycbxlmdCI1HHnQSwReOQ6Or-dNPdYoBWVBU3lRhas78H9etz5UgsYp_38ToWQZep0epY14w/exec"; 
+console.log("✅ API_URL Loaded:", API_URL);
