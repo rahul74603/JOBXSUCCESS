@@ -36,36 +36,18 @@
         document.addEventListener("DOMContentLoaded", async function () {
             console.log("🚀 Config.js लोड हुआ:", window.API_URL); // ✅ Debugging
 
-            // ✅ API Key को LocalStorage से लें
-            let apiKey = localStorage.getItem("apiKey");
+            let API_URL = window.API_URL; // ✅ Google Sheets API URL
 
-            if (!apiKey) {
-                console.error("❌ API Key Not Found!");
-                alert("⚠️ API Key सेट नहीं है! पहले API Key सेट करें।");
-                return;
-            }
-
-            // ✅ सही API_URL बनाएं (Google Apps Script + Secret Key)
-            let API_URL = `${window.API_URL}?key=${apiKey}`;
-            console.log("✅ Final API_URL:", API_URL);
-
-            // ✅ Check if Table Exists
             const tableBody = document.querySelector("#jobs-table tbody");
             const loadingElement = document.getElementById("loading");
-
-            if (!tableBody || !loadingElement) {
-                console.error("❌ Error: 'jobs-table' या 'loading' एलिमेंट नहीं मिला!");
-                return;
-            }
 
             async function fetchJobs() {
                 try {
                     loadingElement.style.display = "block"; // ✅ Show Loading
                     tableBody.innerHTML = ""; // ✅ Clear Old Data
 
-                    // ✅ Fetch Jobs from API
                     console.log("🌍 Fetching Jobs from API...");
-                    let response = await fetch(`${API_URL}&t=${new Date().getTime()}`);
+                    let response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
                     
                     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
@@ -78,10 +60,10 @@
                         let row = document.createElement("tr");
 
                         row.innerHTML = `
-                            <td>${job.title}</td>
-                            <td>${job.organization || "N/A"}</td>
-                            <td>${job.lastDate || "N/A"}</td>
-                            <td><a href="${job.applyLink}" target="_blank">Apply</a></td>
+                            <td>${job["JOBS TITLE"]}</td>
+                            <td>${job["ORGANIZATION"] || "N/A"}</td>
+                            <td>${job["LAST DATE"] || "N/A"}</td>
+                            <td><a href="${job["APPLY LINK"]}" target="_blank">Apply</a></td>
                         `;
 
                         tableBody.appendChild(row);
