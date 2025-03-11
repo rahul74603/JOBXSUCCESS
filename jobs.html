@@ -20,10 +20,17 @@
 
         async function fetchJobs() {
             try {
+                const tableBody = document.querySelector("#jobs-table tbody");
+                const loadingElement = document.getElementById("loading");
+
+                if (!tableBody || !loadingElement) {
+                    console.error("❌ Error: 'jobs-table' या 'loading' एलिमेंट नहीं मिला!");
+                    return;
+                }
+
                 const response = await fetch(API_URL);
                 const jobs = await response.json();
 
-                const tableBody = document.querySelector("#jobs-table tbody");
                 tableBody.innerHTML = "";
 
                 jobs.forEach(job => {
@@ -52,13 +59,16 @@
                     tableBody.appendChild(row);
                 });
 
-                document.getElementById("loading").style.display = "none";
+                loadingElement.style.display = "none";
             } catch (error) {
-                document.getElementById("loading").textContent = "❌ जॉब डेटा लोड करने में समस्या!";
+                const loadingElement = document.getElementById("loading");
+                if (loadingElement) {
+                    loadingElement.textContent = "❌ जॉब डेटा लोड करने में समस्या!";
+                }
                 console.error("❌ Error fetching jobs:", error);
             }
         }
 
         fetchJobs();
     });
-</script>
+                    </script>
