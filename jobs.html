@@ -1,74 +1,102 @@
-<!-- ✅ Config.js पहले लोड हो -->
-<script src="config.js" defer></script>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 नौकरी अपडेट्स - JOBXSUCCESS</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- ✅ Config.js पहले लोड करें -->
+    <script src="config.js" defer></script>
+</head>
+<body>
 
-<script>
-    document.addEventListener("DOMContentLoaded", async function () {
-        console.log("🚀 Config.js लोड हुआ:", window.API_URL); // ✅ Debugging
+    <h1>🔥 नौकरी अपडेट्स</h1>
 
-        // ✅ API Key को LocalStorage से लें
-        let apiKey = localStorage.getItem("apiKey");
+    <!-- ✅ Loading Message -->
+    <p id="loading">⏳ जॉब डेटा लोड हो रहा है...</p>
 
-        if (!apiKey) {
-            console.error("❌ API Key Not Found!");
-            alert("⚠️ API Key सेट नहीं है! पहले API Key सेट करें।");
-            return;
-        }
+    <!-- ✅ Jobs Table -->
+    <table id="jobs-table" border="1">
+        <thead>
+            <tr>
+                <th>🔹 नौकरी का नाम</th>
+                <th>🏢 कंपनी</th>
+                <th>📅 अंतिम तिथि</th>
+                <th>➡️ आवेदन</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ✅ जॉब डेटा यहां लोड होगा -->
+        </tbody>
+    </table>
 
-        // ✅ सही API_URL बनाएं (Google Apps Script + Secret Key)
-        let API_URL = `${window.API_URL}?key=${apiKey}`;
-        console.log("✅ Final API_URL:", API_URL);
+    <!-- ✅ JavaScript Script लोड करें -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            console.log("🚀 Config.js लोड हुआ:", window.API_URL); // ✅ Debugging
 
-        async function fetchJobs() {
-            try {
-                const tableBody = document.querySelector("#jobs-table tbody");
-                const loadingElement = document.getElementById("loading");
+            // ✅ API Key को LocalStorage से लें
+            let apiKey = localStorage.getItem("apiKey");
 
-                if (!tableBody || !loadingElement) {
-                    console.error("❌ Error: 'jobs-table' या 'loading' एलिमेंट नहीं मिला!");
-                    return;
-                }
+            if (!apiKey) {
+                console.error("❌ API Key Not Found!");
+                alert("⚠️ API Key सेट नहीं है! पहले API Key सेट करें।");
+                return;
+            }
 
-                const response = await fetch(API_URL);
-                const jobs = await response.json();
+            // ✅ सही API_URL बनाएं (Google Apps Script + Secret Key)
+            let API_URL = `${window.API_URL}?key=${apiKey}`;
+            console.log("✅ Final API_URL:", API_URL);
 
-                tableBody.innerHTML = "";
+            // ✅ Check if Table Exists
+            const tableBody = document.querySelector("#jobs-table tbody");
+            const loadingElement = document.getElementById("loading");
 
-                jobs.forEach(job => {
-                    const row = document.createElement("tr");
+            if (!tableBody || !loadingElement) {
+                console.error("❌ Error: 'jobs-table' या 'loading' एलिमेंट नहीं मिला!");
+                return;
+            }
 
-                    const titleCell = document.createElement("td");
-                    titleCell.textContent = job.title;
-                    row.appendChild(titleCell);
+            async function fetchJobs() {
+                try {
+                    loadingElement.style.display = "block"; // ✅ Show Loading
+                    tableBody.innerHTML = ""; // ✅ Clear Old Data
 
-                    const orgCell = document.createElement("td");
-                    orgCell.textContent = job.organization;
-                    row.appendChild(orgCell);
+                    // ✅ Fetch Jobs from API
+                    console.log("🌍 Fetching Jobs from API...");
+                    let response = await fetch(`${API_URL}&t=${new Date().getTime()}`);
+                    
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-                    const dateCell = document.createElement("td");
-                    dateCell.textContent = job.lastDate;
-                    row.appendChild(dateCell);
+                    let jobs = await response.json();
 
-                    const linkCell = document.createElement("td");
-                    const link = document.createElement("a");
-                    link.href = job.applyLink;
-                    link.textContent = "Apply";
-                    link.target = "_blank";
-                    linkCell.appendChild(link);
-                    row.appendChild(linkCell);
+                    if (!Array.isArray(jobs)) throw new Error("Invalid Data Format from API");
 
-                    tableBody.appendChild(row);
-                });
+                    // ✅ Insert Data into Table
+                    jobs.forEach(job => {
+                        let row = document.createElement("tr");
 
-                loadingElement.style.display = "none";
-            } catch (error) {
-                const loadingElement = document.getElementById("loading");
-                if (loadingElement) {
+                        row.innerHTML = `
+                            <td>${job.title}</td>
+                            <td>${job.organization || "N/A"}</td>
+                            <td>${job.lastDate || "N/A"}</td>
+                            <td><a href="${job.applyLink}" target="_blank">Apply</a></td>
+                        `;
+
+                        tableBody.appendChild(row);
+                    });
+
+                    loadingElement.style.display = "none"; // ✅ Hide Loading
+                } catch (error) {
+                    console.error("❌ Error fetching jobs:", error);
                     loadingElement.textContent = "❌ जॉब डेटा लोड करने में समस्या!";
                 }
-                console.error("❌ Error fetching jobs:", error);
             }
-        }
 
-        fetchJobs();
-    });
-                    </script>
+            fetchJobs();
+        });
+    </script>
+
+</body>
+</html>
