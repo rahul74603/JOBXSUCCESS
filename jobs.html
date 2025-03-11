@@ -89,51 +89,50 @@
     <!-- ✅ Config.js Include -->
     <script src="config.js"></script>
     <script>
-        // Sample job data (can be replaced with real data)
-        const jobs = [
-            { title: "Software Engineer", organization: "Tech Corp", lastDate: "2025-04-01", applyLink: "https://example.com/apply1" },
-            { title: "Data Analyst", organization: "Data Inc", lastDate: "2025-03-25", applyLink: "https://example.com/apply2" },
-            { title: "Project Manager", organization: "Build Ltd", lastDate: "2025-03-30", applyLink: "https://example.com/apply3" },
-            { title: "Web Developer", organization: "Web Solutions", lastDate: "2025-04-05", applyLink: "https://example.com/apply4" },
-            { title: "Graphic Designer", organization: "Creative Studio", lastDate: "2025-03-28", applyLink: "https://example.com/apply5" },
-            // Add more jobs as needed
-        ];
+        async function fetchJobs() {
+            try {
+                const apiUrl = API_URL; // config.js में API URL define होना चाहिए
+                const response = await fetch(apiUrl);
+                const jobs = await response.json();
 
-        function loadJobs() {
-            const tableBody = document.querySelector("#jobs-table tbody");
-            tableBody.innerHTML = ""; // Clear existing rows
+                const tableBody = document.querySelector("#jobs-table tbody");
+                tableBody.innerHTML = ""; // Clear existing rows
 
-            jobs.forEach(job => {
-                const row = document.createElement("tr");
+                jobs.forEach(job => {
+                    const row = document.createElement("tr");
 
-                const titleCell = document.createElement("td");
-                titleCell.textContent = job.title;
-                row.appendChild(titleCell);
+                    const titleCell = document.createElement("td");
+                    titleCell.textContent = job.title;
+                    row.appendChild(titleCell);
 
-                const orgCell = document.createElement("td");
-                orgCell.textContent = job.organization;
-                row.appendChild(orgCell);
+                    const orgCell = document.createElement("td");
+                    orgCell.textContent = job.organization;
+                    row.appendChild(orgCell);
 
-                const dateCell = document.createElement("td");
-                dateCell.textContent = job.lastDate;
-                row.appendChild(dateCell);
+                    const dateCell = document.createElement("td");
+                    dateCell.textContent = job.lastDate;
+                    row.appendChild(dateCell);
 
-                const linkCell = document.createElement("td");
-                const link = document.createElement("a");
-                link.href = job.applyLink;
-                link.textContent = "Apply";
-                link.target = "_blank";
-                linkCell.appendChild(link);
-                row.appendChild(linkCell);
+                    const linkCell = document.createElement("td");
+                    const link = document.createElement("a");
+                    link.href = job.applyLink;
+                    link.textContent = "Apply";
+                    link.target = "_blank";
+                    linkCell.appendChild(link);
+                    row.appendChild(linkCell);
 
-                tableBody.appendChild(row);
-            });
+                    tableBody.appendChild(row);
+                });
 
-            document.getElementById("loading").style.display = "none";
+                document.getElementById("loading").style.display = "none";
+            } catch (error) {
+                document.getElementById("loading").textContent = "❌ जॉब डेटा लोड करने में समस्या आ रही है!";
+                console.error("Error fetching jobs:", error);
+            }
         }
 
         // Load jobs when the page is loaded
-        document.addEventListener("DOMContentLoaded", loadJobs);
+        document.addEventListener("DOMContentLoaded", fetchJobs);
     </script>
 </body>
 </html>
