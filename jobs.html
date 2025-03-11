@@ -3,12 +3,24 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", async function () {
-        console.log("🚀 Config.js लोड हुआ:", API_URL); // ✅ Debugging
+        console.log("🚀 Config.js लोड हुआ:", window.API_URL); // ✅ Debugging
+
+        // ✅ API Key को LocalStorage से लें
+        let apiKey = localStorage.getItem("apiKey");
+
+        if (!apiKey) {
+            console.error("❌ API Key Not Found!");
+            alert("⚠️ API Key सेट नहीं है! पहले API Key सेट करें।");
+            return;
+        }
+
+        // ✅ सही API_URL बनाएं (Google Apps Script + Secret Key)
+        let API_URL = `${window.API_URL}?key=${apiKey}`;
+        console.log("✅ Final API_URL:", API_URL);
 
         async function fetchJobs() {
             try {
-                const apiUrl = API_URL;
-                const response = await fetch(apiUrl);
+                const response = await fetch(API_URL);
                 const jobs = await response.json();
 
                 const tableBody = document.querySelector("#jobs-table tbody");
@@ -43,7 +55,7 @@
                 document.getElementById("loading").style.display = "none";
             } catch (error) {
                 document.getElementById("loading").textContent = "❌ जॉब डेटा लोड करने में समस्या!";
-                console.error("Error fetching jobs:", error);
+                console.error("❌ Error fetching jobs:", error);
             }
         }
 
