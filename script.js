@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // ✅ API_URL को Global Scope में Define करें
-    window.API_URL = `https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec?key=${apiKey}`;
+    window.API_URL = `https://script.google.com/macros/s/AKfycbxlmdCI1HHnQSwReOQ6Or-dNPdYoBWVBU3lRhas78H9etz5UgsYp_38ToWQZep0epY14w/exec?key=${apiKey}`;
     console.log("✅ API_URL Loaded:", window.API_URL);
 
     // ✅ 2️⃣ Jobs Data Load करना (LocalStorage Cache के साथ)
