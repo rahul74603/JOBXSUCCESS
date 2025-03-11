@@ -14,10 +14,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     window.API_URL = `https://script.google.com/macros/s/AKfycbxlmdCI1HHnQSwReOQ6Or-dNPdYoBWVBU3lRhas78H9etz5UgsYp_38ToWQZep0epY14w/exec?key=${apiKey}`;
     console.log("✅ API_URL Loaded:", window.API_URL);
 
+    // ✅ Check if `jobs-container` Exists
+    let jobContainer = document.getElementById("jobs-container");
+    if (!jobContainer) {
+        console.error("❌ jobs-container एलिमेंट नहीं मिला!");
+        return;
+    }
+
     // ✅ 2️⃣ Jobs Data Load करना (LocalStorage Cache के साथ)
     async function loadJobs() {
         try {
-            let jobContainer = document.getElementById("jobs-container");
             jobContainer.innerHTML = `<p>⏳ नौकरी की जानकारी लोड हो रही है...</p>`;
 
             // 🔹 पहले LocalStorage से Cache चेक करें
@@ -27,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 displayJobs(JSON.parse(cachedJobs));
             }
 
-            // 🔹 API से नया डेटा लाएं (Cache Bypass करने के लिए टाइमस्टैम्प जोड़ें)
+            // 🔹 API से नया डेटा लाएं
             console.log("🌍 Fetching Jobs from API...");
             let response = await fetch(`${window.API_URL}&t=${new Date().getTime()}`);
 
@@ -45,13 +51,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             displayJobs(data);
         } catch (error) {
             console.error("❌ Error Fetching Jobs:", error);
-            document.getElementById("jobs-container").innerHTML = `<p class="error-message">❌ नौकरी की जानकारी लोड करने में समस्या आई।</p>`;
+            jobContainer.innerHTML = `<p class="error-message">❌ नौकरी की जानकारी लोड करने में समस्या आई।</p>`;
         }
     }
 
     // ✅ 3️⃣ Jobs Show करने का Function
     function displayJobs(data) {
-        let jobContainer = document.getElementById("jobs-container");
         jobContainer.innerHTML = ""; // पुराना डेटा साफ करें
 
         if (data.length === 0) {
@@ -72,8 +77,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    // ✅ 4️⃣ अगर Jobs Page है तो Data लोड करें
-    if (document.getElementById("jobs-container")) {
-        loadJobs();
-    }
+    // ✅ 4️⃣ Load Jobs on Page Load
+    loadJobs();
 });
