@@ -1,102 +1,18 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>सरकारी नौकरी अपडेट</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Navigation Bar Styles */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            background-color: #007BFF;
-            padding: 10px 20px;
-            color: white;
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-            font-weight: bold;
-        }
-        .navbar a:hover {
-            text-decoration: underline;
-        }
+<!-- ✅ Config.js पहले लोड हो -->
+<script src="config.js" defer></script>
 
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        console.log("🚀 Config.js लोड हुआ:", API_URL); // ✅ Debugging
 
-        /* Loading Animation */
-        #loading {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <!-- Navigation Bar -->
-    <div class="navbar">
-        <div>
-            <a href="#home">Home</a>
-            <a href="#study-materials">Study Materials</a>
-        </div>
-        <div>
-            <a href="javascript:history.back()">Back</a>
-        </div>
-    </div>
-
-    <h1>📢 ताज़ा सरकारी नौकरियाँ</h1>
-
-    <!-- Loading Animation -->
-    <div id="loading">⏳ नौकरियाँ लोड हो रही हैं...</div>
-
-    <!-- Jobs Table -->
-    <table id="jobs-table">
-        <thead>
-            <tr>
-                <th>JOBS TITLE</th>
-                <th>ORGANIZATION</th>
-                <th>LAST DATE</th>
-                <th>APPLY LINK</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Job rows will be inserted here by JavaScript -->
-        </tbody>
-    </table>
-
-    <!-- ✅ Config.js Include -->
-    <script src="config.js"></script>
-    <script>
         async function fetchJobs() {
             try {
-                const apiUrl = API_URL; // config.js में API URL define होना चाहिए
+                const apiUrl = API_URL;
                 const response = await fetch(apiUrl);
                 const jobs = await response.json();
 
                 const tableBody = document.querySelector("#jobs-table tbody");
-                tableBody.innerHTML = ""; // Clear existing rows
+                tableBody.innerHTML = "";
 
                 jobs.forEach(job => {
                     const row = document.createElement("tr");
@@ -126,13 +42,11 @@
 
                 document.getElementById("loading").style.display = "none";
             } catch (error) {
-                document.getElementById("loading").textContent = "❌ जॉब डेटा लोड करने में समस्या आ रही है!";
+                document.getElementById("loading").textContent = "❌ जॉब डेटा लोड करने में समस्या!";
                 console.error("Error fetching jobs:", error);
             }
         }
 
-        // Load jobs when the page is loaded
-        document.addEventListener("DOMContentLoaded", fetchJobs);
-    </script>
-</body>
-</html>
+        fetchJobs();
+    });
+</script>
