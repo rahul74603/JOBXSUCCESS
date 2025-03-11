@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // ✅ API_URL को Global Scope में Define करें
-    window.API_URL = `https://script.google.com/macros/s/AKfycbxlmdCI1HHnQSwReOQ6Or-dNPdYoBWVBU3lRhas78H9etz5UgsYp_38ToWQZep0epY14w/exec?key=${apiKey}`;
+    window.API_URL = `https://script.google.com/macros/s/AKfycbwJ_k5I3-gdgEme8JGTYG6EHTxoovaG44bJ6fU-qtvOaPqOipM8sc1IAREE04_XQi7P/exec?key=${apiKey}`;
     console.log("✅ API_URL Loaded:", window.API_URL);
 
     // ✅ Check if `jobs-container` Exists
