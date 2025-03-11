@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔥 नौकरी अपडेट्स - JOBXSUCCESS</title>
     <link rel="stylesheet" href="style.css">
-    
+
     <!-- ✅ Config.js पहले लोड करें -->
-    <script src="config.js" defer></script>
+    <script src="config.js"></script>
 </head>
 <body>
 
@@ -36,6 +36,12 @@
         document.addEventListener("DOMContentLoaded", async function () {
             console.log("🚀 Config.js लोड हुआ:", window.API_URL); // ✅ Debugging
 
+            if (!window.API_URL) {
+                console.error("❌ API_URL डिफ़ाइन नहीं है!");
+                document.getElementById("loading").textContent = "❌ API URL लोड नहीं हुआ!";
+                return;
+            }
+
             let API_URL = window.API_URL; // ✅ Google Sheets API URL
 
             const tableBody = document.querySelector("#jobs-table tbody");
@@ -46,12 +52,13 @@
                     loadingElement.style.display = "block"; // ✅ Show Loading
                     tableBody.innerHTML = ""; // ✅ Clear Old Data
 
-                    console.log("🌍 Fetching Jobs from API...");
+                    console.log("🌍 Fetching Jobs from API:", API_URL);
                     let response = await fetch(`${API_URL}?t=${new Date().getTime()}`);
                     
                     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
                     let jobs = await response.json();
+                    console.log("📊 Jobs Data:", jobs); // ✅ Debugging
 
                     if (!Array.isArray(jobs)) throw new Error("Invalid Data Format from API");
 
@@ -60,10 +67,10 @@
                         let row = document.createElement("tr");
 
                         row.innerHTML = `
-                            <td>${job["JOBS TITLE"]}</td>
+                            <td>${job["JOBS TITLE"] || "N/A"}</td>
                             <td>${job["ORGANIZATION"] || "N/A"}</td>
                             <td>${job["LAST DATE"] || "N/A"}</td>
-                            <td><a href="${job["APPLY LINK"]}" target="_blank">Apply</a></td>
+                            <td><a href="${job["APPLY LINK"] || "#"}" target="_blank">Apply</a></td>
                         `;
 
                         tableBody.appendChild(row);
