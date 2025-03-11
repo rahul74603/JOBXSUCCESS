@@ -10,8 +10,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
     }
 
-    // ✅ API_URL को Define करें (Google Apps Script URL + API Key)
-    let API_URL = `https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec?key=${apiKey}`;
+    // ✅ API_URL को Global Scope में Define करें
+    window.API_URL = `https://script.google.com/macros/s/AKfycbxnx750QfVkitn4Aoft2II7L-mw0DkzdN4I1OjW1vuEjODVt0uu8XvPlww80St5Txd37Q/exec?key=${apiKey}`;
+    console.log("✅ API_URL Loaded:", window.API_URL);
 
     // ✅ 2️⃣ Jobs Data Load करना (LocalStorage Cache के साथ)
     async function loadJobs() {
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             // 🔹 API से नया डेटा लाएं (Cache Bypass करने के लिए टाइमस्टैम्प जोड़ें)
             console.log("🌍 Fetching Jobs from API...");
-            let response = await fetch(`${API_URL}&t=${new Date().getTime()}`);
+            let response = await fetch(`${window.API_URL}&t=${new Date().getTime()}`);
 
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
